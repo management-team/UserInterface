@@ -16,10 +16,14 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
         const resp = await userClient.findAllByEmails(emailList);
 
         const userList: IUser[] = resp.data.map((user: any) => <IUser>user)
-        
+
         dispatch({
             payload: {
-                manageUsers: userList
+                manageUsers: userList.map((user: IUser) => ({
+                    email: user.email,
+                    firstname: user.firstName,
+                    lastName: user.lastName
+                })
             },
             type: manageUsersTypes.GET_USERS
         })
