@@ -21,9 +21,9 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
             payload: {
                 manageUsers: userList.map((user: IUser) => ({
                     email: user.email,
-                    firstname: user.firstName,
+                    firstName: user.firstName,
                     lastName: user.lastName
-                })
+                })),
             },
             type: manageUsersTypes.GET_USERS
         })
