@@ -25,6 +25,16 @@ export const hoveredUser = (email: string) => async (dispatch: (action: any) => 
   })
 }
 
+export const selectUserForDisplay = (email: string) => async (dispatch: (action: any) => void) => {
+  const resp = await userClient.findOneByEmail(email);
+  dispatch ({
+      payload: {
+          newUser: resp.data
+      },
+      type: viewUserTypes.VIEW_USER
+  })
+}
+
 export const updateUserInfo = (newUser: IUser) => {
   return {
     payload: {
