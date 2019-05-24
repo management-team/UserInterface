@@ -7,6 +7,7 @@ import DropdownItem from 'react-bootstrap/DropdownItem';
 export interface IManageInternalComponentProps {
   manageUsers: ICognitoUser[];
 
+  
   toggleViewUserModal: () => void;
   /**
    * Handles what happens when a user is hovered
@@ -50,6 +51,9 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
 
   constructor(props: IManageInternalComponentProps) {
     super(props);
+    this.state={
+      roleDropdownList: false
+    }
   }
 
   displayUserModal = (userEmail: string) => {
@@ -57,15 +61,20 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
     // this.props.selectUserForDisplay(userEmail);
   }
 
+  toggleDropdownList =() =>{
+    this.setState({
+      roleDropdownList: !this.state.roleDropdownList
+    });
+  }
 
   render() {
     return (
       <>
         <div id="manage-cohorts-nav" className="rev-background-color">
           <div id="manage-cohorts-view-selection-container">
-            <div>View By:</div>
+            <div>View By Role:</div>
             <Dropdown color="success" className="responsive-modal-row-item rev-btn"
-              isOpen={false}>
+              isOpen={this.state.roleDropdownList} toggle={this.toggleDropdownList}>
               {/* toggle={this.props.toggleViewUserModal}> */}
               <DropdownToggle caret>
                 Selection

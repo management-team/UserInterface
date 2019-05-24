@@ -131,6 +131,7 @@ export interface ICohortModalState {
     resetPassword: IResetPasswordState,
     resetPasswordUsername: IResetPasswordUsernameState,
     login: ILoginState,
+    statusDropdownActive: boolean;
   }
 
   export const managementState = combineReducers<IManagementState>({
