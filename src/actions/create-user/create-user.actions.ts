@@ -4,6 +4,8 @@ import { userClient } from "../../axios/sms-clients/user-client";
 import { toast } from "react-toastify";
 import { ICognitoUserAddGroup } from "../../model/cognito-user-add-group.model";
 import { cognitoClient } from "../../axios/sms-clients/cognito-client";
+import { cohortClient } from "../../axios/sms-clients/cohort-client";
+import { ICohort } from "../../model/cohort";
 
 export const createUserTypes = {
   TOGGLE: 'TOGGLE_CREATE_USER_MODAL',
@@ -66,7 +68,7 @@ export const updateNewUserRole = (role: string, dropdownRole: string) => {
   }
 }
 
-export const updateNewUserCohort = (cohort: string) => {
+export const updateNewUserCohort = (cohort: ICohort) => {
   return {
     payload: {
       cohort
@@ -86,9 +88,9 @@ export const updateNewUser = (newUser: IUser) => {
 
 
 //Use async await tho?
-export const saveUser = (newUser: IUser) => async (dispatch: (action: any) => void) => {
+export const saveUser = (newUser: IUser, cohort?: ICohort) => async (dispatch: (action: any) => void) => {
   await userClient.saveUser(newUser)
-    .then(resp => {
+    .then(async resp => {
       toast.success('User Created')
       dispatch({
         payload: {},
@@ -99,12 +101,13 @@ export const saveUser = (newUser: IUser) => async (dispatch: (action: any) => vo
           email: newUser.email,
           groupName: newUser.roles[0]
         };
-        cognitoClient.addUserToGroup(newCogUser);
+        await cognitoClient.addUserToGroup(newCogUser);
       }
+
+      if (cohort)
+        await cohortClient.joinCohort(newUser, cohort.cohortToken);
     })
     .catch(e => {
       toast.error('Failed To Save User')
     })
-
-
 }

@@ -1,4 +1,5 @@
 import { IAddress } from "./address.model";
+import { ICohort } from "./cohort";
 
 export interface ICreateUser {
   email:      string;
@@ -7,6 +8,6 @@ export interface ICreateUser {
   phoneNumber:     string;
   trainingAddress:    IAddress;
   dropdownRole: string,
-  cohort: string,
+  cohort: ICohort,
   role: string,
 }

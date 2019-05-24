@@ -19,7 +19,56 @@ const initialState: ICreateUserState = {
     },
     role: '',
     dropdownRole: '',
-    cohort: '',
+    cohort: {
+      cohortId: 0,
+      cohortName: '',
+      cohortDescription: '',
+      cohortToken: '',
+      address: {
+        addressId: 0,
+        street: '',
+        alias: '',
+        city: '',
+        country: '',
+        state: '',
+        zip: ''
+      },
+      startDate: '',
+      endDate: '',
+      users: [],
+      trainer: {
+        userId: 0,
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        personalAddress: {
+          addressId: 0,
+          street: '',
+          alias: '',
+          city: '',
+          state: '',
+          country: '',
+          zip: ''
+        },
+        trainingAddress: {
+          addressId: 0,
+          street: '',
+          alias: '',
+          city: '',
+          state: '',
+          country: '',
+          zip: ''
+        },
+        userStatus: {
+          statusId: 0,
+          generalStatus: '',
+          specificStatus: '',
+          virtual: false
+        },
+        roles: [],
+      },
+    },
     email: '',
     firstName: '',
     lastName: '',

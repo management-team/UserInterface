@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { CreateUserModal } from './create-user-modal.component';
 import { IAddress } from '../../../model/address.model';
 import { IUser } from '../../../model/user.model';
+import { ICohort } from '../../../model/cohort';
 
 export interface ICreateUserModal {
   toggleModal: () => void,
@@ -15,10 +16,10 @@ export interface ICreateUserModal {
   createUser: ICreateUserState,
   addresses: IAddressState,
   cohorts: IManageCohortsState,
-  saveUser: (user: IUser) => void,
+  saveUser: (user: IUser,cohort?: ICohort) => void,
   updateNewUserLocation: (location: IAddress) => void,
   updateNewUserRole:(role: string, dropwdownRole: string) => void,
-  updateNewUserCohort:(cohort: string) => void,
+  updateNewUserCohort:(cohort: ICohort) => void,
   updateNewUser: (user: IUser) => void,
   updateLocations: () => void
 }

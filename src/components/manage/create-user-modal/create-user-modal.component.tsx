@@ -110,7 +110,7 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
       },
       roles: [this.props.createUser.newUser.role],
     }
-    this.props.saveUser(tempUser);
+    this.props.saveUser(tempUser, this.props.createUser.newUser.cohort);
   }
 
 
@@ -212,7 +212,7 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
                         <DropdownItem divider />
                       </>
                       : cohorts.cohorts.map(cohort =>
-                        <DropdownItem key={cohort.cohortId} onClick={() => this.props.updateNewUserCohort(cohort.cohortName)}>{cohort.cohortName}</DropdownItem>
+                        <DropdownItem key={cohort.cohortId} onClick={() => this.props.updateNewUserCohort(cohort)}>{cohort.cohortName}</DropdownItem>
                       )
                   }
                 </DropdownMenu>
