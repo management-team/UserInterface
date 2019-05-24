@@ -1,4 +1,6 @@
 export interface ICognitoUser {
-  email: string;
-  roles: string[]
+    firstName?: string;
+    lastName?: string;
+    email: string;
+    roles: string[]
 }
