@@ -81,6 +81,7 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
       roles: [updatedNewUser.role],
     }
     this.props.updateNewUser(tempUser)
+    this.props.updateNewUserCohort(updatedNewUser.cohort);
   }
 
   saveNewUser = (e: React.FormEvent) => {
@@ -200,9 +201,10 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
 
               <Dropdown color="success" className="responsive-modal-row-item rev-btn"
                 isOpen={this.props.createUser.cohortDropdownActive}
-                toggle={this.props.toggleCohortDropdown}>
+                toggle={this.props.toggleCohortDropdown}
+              >
                 <DropdownToggle caret>
-                  {createUser.newUser.cohort || 'Cohort'}
+                  {createUser.newUser.cohort.cohortName || 'Cohort'}
                 </DropdownToggle>
                 <DropdownMenu>
                   {

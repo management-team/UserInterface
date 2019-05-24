@@ -16,7 +16,7 @@ export interface ICreateUserModal {
   createUser: ICreateUserState,
   addresses: IAddressState,
   cohorts: IManageCohortsState,
-  saveUser: (user: IUser,cohort?: ICohort) => void,
+  saveUser: (user: IUser, cohort?: ICohort) => void,
   updateNewUserLocation: (location: IAddress) => void,
   updateNewUserRole:(role: string, dropwdownRole: string) => void,
   updateNewUserCohort:(cohort: ICohort) => void,

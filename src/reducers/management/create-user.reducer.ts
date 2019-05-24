@@ -120,7 +120,7 @@ export const createUserReducer = (state = initialState, action: any) => {
         ...state,
         newUser: {
           ...state.newUser,
-          cohort: action.payload.cohort
+          cohort: action.payload.cohort,
         }
       }
     case createUserTypes.UPDATE_NEW_USER:
