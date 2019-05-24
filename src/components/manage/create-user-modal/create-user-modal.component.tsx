@@ -116,7 +116,7 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
 
 
   render() {
-    const { createUser, addresses } = this.props;
+    const { createUser, addresses, cohorts } = this.props;
     return (
       <Modal isOpen={this.props.createUser.enabled} id="futurafont">
         <form onSubmit={this.saveNewUser}>
@@ -195,6 +195,26 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
                   <DropdownItem onClick={() => this.props.updateNewUserRole('staging-manager', 'Staging Manager')}>Staging Manager</DropdownItem>
                   <DropdownItem onClick={() => this.props.updateNewUserRole('trainer', 'Trainer')}>Trainer</DropdownItem>
                   <DropdownItem onClick={() => this.props.updateNewUserRole('associate', 'Associate')}>Associate</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+
+              <Dropdown color="success" className="responsive-modal-row-item rev-btn"
+                isOpen={this.props.createUser.cohortDropdownActive}
+                toggle={this.props.toggleCohortDropdown}>
+                <DropdownToggle caret>
+                  {createUser.newUser.cohort || 'Cohort'}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {
+                    cohorts.cohorts.length === 0
+                      ? <>
+                        <DropdownItem>Unable To Find Any Cohorts</DropdownItem>
+                        <DropdownItem divider />
+                      </>
+                      : cohorts.cohorts.map(cohort =>
+                        <DropdownItem key={cohort.cohortId} onClick={() => this.props.updateNewUserCohort(cohort.cohortName)}>{cohort.cohortName}</DropdownItem>
+                      )
+                  }
                 </DropdownMenu>
               </Dropdown>
             </div>

@@ -1,7 +1,7 @@
 import { toggleModal, toggleLocationDropdown, updateNewUserLocation, updateNewUser, saveUser, toggleRoleDropdown, toggleCohortDropdown, updateNewUserRole, updateNewUserCohort } from '../../../actions/create-user/create-user.actions';
 import { updateLocations } from '../../../actions/address/address.actions';
 import { IState,} from '../../../reducers';
-import { ICreateUserState, IAddressState } from '../../../reducers/management'
+import { ICreateUserState, IAddressState, IManageCohortsState } from '../../../reducers/management'
 import { connect } from 'react-redux';
 import { CreateUserModal } from './create-user-modal.component';
 import { IAddress } from '../../../model/address.model';
@@ -14,6 +14,7 @@ export interface ICreateUserModal {
   toggleCohortDropdown: () => void,
   createUser: ICreateUserState,
   addresses: IAddressState,
+  cohorts: IManageCohortsState,
   saveUser: (user: IUser) => void,
   updateNewUserLocation: (location: IAddress) => void,
   updateNewUserRole:(role: string, dropwdownRole: string) => void,
@@ -24,7 +25,8 @@ export interface ICreateUserModal {
 
 const mapStateToProps = (state:IState) => ({
   addresses: state.managementState.addresses,
-  createUser: state.managementState.createUser
+  createUser: state.managementState.createUser,
+  cohorts: state.managementState.manageCohorts,
 });
 
 const mapDispatchToProps = {
