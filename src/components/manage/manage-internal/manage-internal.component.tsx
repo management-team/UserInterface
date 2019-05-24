@@ -50,6 +50,11 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
   constructor(props: IManageInternalComponentProps) {
     super(props);
   }
+
+  displayUserModal = (userEmail: string) => {
+    this.props.toggleViewUserModal();
+    // this.props.selectUserForDisplay(userEmail);
+  }
   
 
   render() {
@@ -61,7 +66,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
-              <th></th>
+              <th>Roles</th>
             </tr>
           </thead>
           <tbody>
@@ -84,6 +89,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                   <td></td>
                   <td></td>
                   <td>{user.email}</td>
+                  <td>{user.roles}</td>
                 </tr>
               )
             }
