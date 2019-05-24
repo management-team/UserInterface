@@ -61,7 +61,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
-              <th></th>
+              <th>Roles</th>
             </tr>
           </thead>
           <tbody>
@@ -80,10 +80,11 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                * () => userClient.findOneByEmail(user.email).then(resp => this.props.updateUserInfo(resp.data))
                */
               this.props.manageUsers.map((user) =>
-                <tr key={user.email} className="rev-table-row" onClick={this.props.toggleViewUserModal} onMouseEnter={()=>this.props.hoveredUser(user.email)}>
+                <tr key={user.email} className="rev-table-row" onClick={this.props.toggleViewUserModal}>
                   <td></td>
                   <td></td>
                   <td>{user.email}</td>
+                  <td>{user.roles}</td>
                 </tr>
               )
             }
