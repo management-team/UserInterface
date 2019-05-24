@@ -20,6 +20,7 @@ import { resetPasswordUsernameReducer } from "./reset-password-username.reducer"
 import { joinCohortReducer } from "./join-cohort.reducer";
 import { IStatus } from "../../model/status.model";
 import { viewCohortReducer } from "./view-cohort.reducer";
+import { ICreateUser } from "../../model/create-user.model";
 
 
 
@@ -37,7 +38,7 @@ export interface IAuthState {
   
   export interface ICreateUserState {
     enabled: boolean,
-    newUser: IUser,
+    newUser: ICreateUser,
     locationDropdownActive: false,
     roleDropdownActive: false,
     cohortDropdownActive: false,

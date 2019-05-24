@@ -34,9 +34,6 @@ const initialState: IViewUserState = {
           virtual: false     
       },
       roles: [],
-      role: '',
-      dropdownRole: '',
-      cohort: '',
   }
 }
 

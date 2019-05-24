@@ -33,9 +33,6 @@ const initialState: IProfileViewState = {
             specificStatus: '',
             virtual: false
         },
-        role: '',
-        dropdownRole: '',
-        cohort: '',
         roles: []
     },
     bUserInfoChanged: false,

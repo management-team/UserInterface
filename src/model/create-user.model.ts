@@ -1,14 +1,12 @@
 import { IAddress } from "./address.model";
-import { IStatus } from "./status.model";
 
-export interface IUser {
+export interface ICreateUser {
   email:      string;
-  userId:     number;
   firstName:  string;
   lastName:   string;
   phoneNumber:     string;
   trainingAddress:    IAddress;
-  personalAddress:    IAddress;
-  userStatus:     IStatus
-  roles: string[];
+  dropdownRole: string,
+  cohort: string,
+  role: string,
 }

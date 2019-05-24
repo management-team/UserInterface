@@ -5,6 +5,7 @@ import {
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem
   } from 'reactstrap';
 import { IJoinCohortStateToProps, IJoinCohortDispatchToProps } from './join-cohort.container';
+import { IUser } from '../../model/user.model';
 
 const inputNames = {
     EMAIL: 'NEW_USER_EMAIL',
@@ -78,13 +79,61 @@ export class JoinCohortComponent extends React.Component<IJoinCohortProps, any> 
           default:
             break;
         }
-        this.props.updateNewUser(updatedNewUser)
+        const tempUser: IUser = {
+          email: this.props.createUser.newUser.email,
+          userId: 0,
+          firstName: this.props.createUser.newUser.firstName,
+          lastName: this.props.createUser.newUser.lastName,
+          phoneNumber: this.props.createUser.newUser.phoneNumber,
+          trainingAddress: this.props.createUser.newUser.trainingAddress,
+          personalAddress: {
+            addressId: 0,
+            street: '',
+            alias: '',
+            city: '',
+            country: '',
+            state: '',
+            zip: ''
+          },
+          userStatus: {
+            statusId: 0,
+            generalStatus: '',
+            specificStatus: '',
+            virtual: false,
+          },
+          roles: [this.props.createUser.newUser.role],
+        }
+        this.props.updateNewUser(tempUser)
       }
     
       saveNewUser = (e: React.FormEvent) => {
         e.preventDefault();
         console.log('saving')
-        this.props.saveUserAssociate(this.props.createUser.newUser);
+        const tempUser: IUser = {
+          email: this.props.createUser.newUser.email,
+          userId: 0,
+          firstName: this.props.createUser.newUser.firstName,
+          lastName: this.props.createUser.newUser.lastName,
+          phoneNumber: this.props.createUser.newUser.phoneNumber,
+          trainingAddress: this.props.createUser.newUser.trainingAddress,
+          personalAddress: {
+            addressId: 0,
+            street: '',
+            alias: '',
+            city: '',
+            country: '',
+            state: '',
+            zip: ''
+          },
+          userStatus: {
+            statusId: 2,
+            generalStatus: 'Training',
+            specificStatus: 'Training',
+            virtual: false
+          },
+          roles: [this.props.createUser.newUser.role],
+        }
+        this.props.saveUserAssociate(tempUser);
       }
     
 

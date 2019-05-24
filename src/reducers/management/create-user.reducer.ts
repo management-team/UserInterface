@@ -8,14 +8,6 @@ const initialState: ICreateUserState = {
   roleDropdownActive: false,
   cohortDropdownActive: false,
   newUser: {
-    userId: 0,
-    userStatus: {
-      statusId: 2,
-      generalStatus: 'Training',
-      specificStatus: 'Training',
-      virtual: false
-    },
-    roles: [],
     trainingAddress: {
       addressId: 0,
       street: '',
@@ -28,15 +20,6 @@ const initialState: ICreateUserState = {
     role: '',
     dropdownRole: '',
     cohort: '',
-    personalAddress: {
-      addressId: 0,
-      street: '',
-      alias: '',
-      city: '',
-      country: '',
-      state: '',
-      zip: '',
-    },
     email: '',
     firstName: '',
     lastName: '',

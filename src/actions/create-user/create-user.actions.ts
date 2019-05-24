@@ -94,10 +94,10 @@ export const saveUser = (newUser: IUser) => async (dispatch: (action: any) => vo
         payload: {},
         type: createUserTypes.USER_SAVED
       });
-      if (newUser.role !== 'associate') {
+      if (newUser.roles[0] !== 'associate') {
         let newCogUser: ICognitoUserAddGroup = {
           email: newUser.email,
-          groupName: newUser.role
+          groupName: newUser.roles[0]
         };
         cognitoClient.addUserToGroup(newCogUser);
       }

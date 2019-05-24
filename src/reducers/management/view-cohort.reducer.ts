@@ -55,9 +55,6 @@ const initialState: ICohortModalState = {
             phoneNumber: '',
             userId: 0,
             roles: [],
-            role: '',
-            dropdownRole: '',
-            cohort: '',
             userStatus: {
                 statusId: 0,
                 generalStatus: '',
