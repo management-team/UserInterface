@@ -5,14 +5,14 @@ import ViewUserModal from '../view-user-modal/view-user-modal.container';
 
 
 export interface IManageInternalComponentProps {
-  manageUsers: ICognitoUser[];
-  toggleViewUserModal: () => void;
-  /**
-   * Handles what happens when a user is hovered
-   * 
-   * @param email: The email address of the hovered user
-   */
-  hoveredUser: (email: string) => void;
+    manageUsers: ICognitoUser[];
+    toggleViewUserModal: () => void;
+    /**
+     * Handles what happens when a user is hovered
+     * 
+     * @param email: The email address of the hovered user
+     */
+    selectUserForDisplay: (email: string) => void;
 }
 /**
  * {v}: dropdown with further info
@@ -47,13 +47,14 @@ export interface IManageInternalComponentProps {
 
 export class ManageInternalComponenet extends React.Component<IManageInternalComponentProps, any> {
 
+  
   constructor(props: IManageInternalComponentProps) {
     super(props);
   }
 
   displayUserModal = (userEmail: string) => {
+    this.props.selectUserForDisplay(userEmail);
     this.props.toggleViewUserModal();
-    // this.props.selectUserForDisplay(userEmail);
   }
   
 
@@ -86,8 +87,8 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                */
               this.props.manageUsers.map((user) =>
                 <tr key={user.email} className="rev-table-row" onClick={this.props.toggleViewUserModal} onMouseEnter={()=>this.props.hoveredUser(user.email)}>
-                  <td></td>
-                  <td></td>
+                  <td>{user.firstName}</td>
+                  <td>{user.lastName}</td>
                   <td>{user.email}</td>
                   <td>{user.roles}</td>
                 </tr>
