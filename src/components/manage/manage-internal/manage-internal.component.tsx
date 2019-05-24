@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Table } from 'reactstrap';
+import { Table, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { ICognitoUser } from '../../../model/cognito-user.model';
 import ViewUserModal from '../view-user-modal/view-user-modal.container';
-
+import DropdownItem from 'react-bootstrap/DropdownItem';
 
 export interface IManageInternalComponentProps {
   manageUsers: ICognitoUser[];
+
   toggleViewUserModal: () => void;
   /**
    * Handles what happens when a user is hovered
@@ -55,12 +56,39 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
     this.props.toggleViewUserModal();
     // this.props.selectUserForDisplay(userEmail);
   }
-  
+
 
   render() {
     return (
+      <>
+        <div id="manage-cohorts-nav" className="rev-background-color">
+          <div id="manage-cohorts-view-selection-container">
+            <div>View By:</div>
+            <Dropdown color="success" className="responsive-modal-row-item rev-btn"
+              isOpen={false}>
+              {/* toggle={this.props.toggleViewUserModal}> */}
+              <DropdownToggle caret>
+                Selection
+                </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>All</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>Admin</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>Trainer</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>Associate</DropdownItem>
+                <DropdownItem divider />
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+
+          {/* <div>
+            <Button className="responsive-modal-row-item rev-btn" onClick={this.props.toggleCreateCohortModal}>New Cohort</Button>
+          </div> */}
+        </div>
         <Table striped id="manage-users-table">
-        <ViewUserModal/>
+          <ViewUserModal />
           <thead className="rev-background-color">
             <tr>
               <th>First Name</th>
@@ -85,7 +113,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                * () => userClient.findOneByEmail(user.email).then(resp => this.props.updateUserInfo(resp.data))
                */
               this.props.manageUsers.map((user) =>
-                <tr key={user.email} className="rev-table-row" onClick={this.props.toggleViewUserModal} onMouseEnter={()=>this.props.hoveredUser(user.email)}>
+                <tr key={user.email} className="rev-table-row" onClick={this.props.toggleViewUserModal} onMouseEnter={() => this.props.hoveredUser(user.email)}>
                   <td></td>
                   <td></td>
                   <td>{user.email}</td>
@@ -95,7 +123,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
             }
           </tbody>
         </Table>
-        
+      </>
     )
   }
 }
