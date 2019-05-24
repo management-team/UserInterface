@@ -14,21 +14,21 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
         const emailList: string[] = response.data.Users.map((user: any) =>
             (user.Attributes.find((attr: any) => attr.Name === 'email').Value));
         const resp = await userClient.findAllByEmails(emailList);
-        console.log(resp.data);
+
         const userList: IUser[] = resp.data.map((user: any) => <IUser>user)
-        console.log(userList);
+
         dispatch({
             payload: {
                 manageUsers: userList.map((user: IUser) => ({
                     email: user.email,
                     firstName: user.firstName,
                     lastName: user.lastName
-                }))
+                })),
             },
             type: manageUsersTypes.GET_USERS
         })
     } catch (e) {
-        toast.warn('Unable to retrive users')
+        toast.warn('Unable to retrieve users')
         dispatch({
             payload: {
             },

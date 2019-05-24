@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Table } from 'reactstrap';
+import { Table, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { ICognitoUser } from '../../../model/cognito-user.model';
 import ViewUserModal from '../view-user-modal/view-user-modal.container';
-
+import DropdownItem from 'react-bootstrap/DropdownItem';
 
 export interface IManageInternalComponentProps {
     manageUsers: ICognitoUser[];
@@ -47,6 +47,7 @@ export interface IManageInternalComponentProps {
 
 export class ManageInternalComponenet extends React.Component<IManageInternalComponentProps, any> {
 
+
     constructor(props: IManageInternalComponentProps) {
         super(props);
     }
@@ -66,7 +67,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
-                        <th></th>
+                        <th>Roles</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,6 +91,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                                 <td>{user.firstName}</td>
                                 <td>{user.lastName}</td>
                                 <td>{user.email}</td>
+                                <td>{user.roles}</td>
                             </tr>
                         )
                     }
