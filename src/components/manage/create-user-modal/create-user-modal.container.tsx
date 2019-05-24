@@ -1,4 +1,4 @@
-import { toggleModal, toggleLocationDropdown, updateNewUserLocation, updateNewUser, saveUser } from '../../../actions/create-user/create-user.actions';
+import { toggleModal, toggleLocationDropdown, updateNewUserLocation, updateNewUser, saveUser, toggleRoleDropdown, toggleCohortDropdown, updateNewUserRole, updateNewUserCohort } from '../../../actions/create-user/create-user.actions';
 import { updateLocations } from '../../../actions/address/address.actions';
 import { IState,} from '../../../reducers';
 import { ICreateUserState, IAddressState } from '../../../reducers/management'
@@ -10,10 +10,14 @@ import { IAddress } from '../../../model/address.model';
 export interface ICreateUserModal {
   toggleModal: () => void,
   toggleLocationDropdown: () => void,
+  toggleRoleDropdown: () => void,
+  toggleCohortDropdown: () => void,
   createUser: ICreateUserState,
   addresses: IAddressState,
   saveUser: (user: IUser) => void,
   updateNewUserLocation: (location: IAddress) => void,
+  updateNewUserRole:(role: string, dropwdownRole: string) => void,
+  updateNewUserCohort:(cohort: string) => void,
   updateNewUser: (user: IUser) => void,
   updateLocations: () => void
 }
@@ -26,8 +30,12 @@ const mapStateToProps = (state:IState) => ({
 const mapDispatchToProps = {
   saveUser,
   toggleLocationDropdown,
+  toggleRoleDropdown,
+  toggleCohortDropdown,
   toggleModal,
   updateLocations,
+  updateNewUserRole,
+  updateNewUserCohort,
   updateNewUser,
   updateNewUserLocation,
 }

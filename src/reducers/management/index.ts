@@ -38,7 +38,9 @@ export interface IAuthState {
   export interface ICreateUserState {
     enabled: boolean,
     newUser: IUser,
-    locationDropdownActive: false
+    locationDropdownActive: false,
+    roleDropdownActive: false,
+    cohortDropdownActive: false,
   }
   
   export interface IViewUserState {

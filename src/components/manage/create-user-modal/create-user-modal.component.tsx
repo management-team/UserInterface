@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
-  Button, Modal, ModalHeader, ModalBody, ModalFooter,
-  InputGroup, InputGroupText, InputGroupAddon, Input,
+  Button, Modal, ModalHeader, ModalBody, ModalFooter, Input,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import { ICreateUserModal } from './create-user-modal.container';
@@ -68,24 +67,54 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
 
 
   render() {
-
     const { createUser, addresses } = this.props;
     return (
-      <Modal isOpen={this.props.createUser.enabled}>
+      <Modal isOpen={this.props.createUser.enabled} id="futurafont">
         <form onSubmit={this.saveNewUser}>
           <ModalHeader className="rev-background-color">Create User</ModalHeader>
           <ModalBody>
             <div className="responsive-modal-row">
-              <InputGroup className="responsive-modal-row-item">
+              <Input name={inputNames.FIRST_NAME}
+                className="responsive-modal-row-item"
+                placeholder="First Name"
+                onChange={this.updateNewUserInfo}
+                value={createUser.newUser.firstName}
+                valid={!!createUser.newUser.firstName}
+                invalid={!createUser.newUser.firstName} />
+
+              <Input name={inputNames.LAST_NAME}
+                className="responsive-modal-row-item"
+                placeholder="Last Name"
+                onChange={this.updateNewUserInfo}
+                value={createUser.newUser.lastName}
+                valid={!!createUser.newUser.lastName}
+                invalid={!createUser.newUser.lastName} />
+            </div>
+            <div className="responsive-modal-row">
+              {/* <InputGroup className="responsive-modal-row-item">
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Email</InputGroupText>
-                </InputGroupAddon>
-                <Input name={inputNames.EMAIL}
-                  onChange={this.updateNewUserInfo}
-                  value={createUser.newUser.email}
-                  valid={!!createUser.newUser.email}
-                  invalid={!createUser.newUser.email} />
-              </InputGroup>
+                </InputGroupAddon> */}
+              <Input className="responsive-modal-row-item"
+                name={inputNames.EMAIL}
+                onChange={this.updateNewUserInfo}
+                value={createUser.newUser.email}
+                valid={!!createUser.newUser.email}
+                invalid={!createUser.newUser.email}
+                placeholder="Email" />
+              <Input className="responsive-modal-row-item"
+                name={inputNames.PHONE}
+                onChange={this.updateNewUserInfo}
+                value={createUser.newUser.phoneNumber}
+                valid={!!createUser.newUser.phoneNumber}
+                invalid={!createUser.newUser.phoneNumber}
+                placeholder="Phone Number" />
+            </div>
+            <div className="responsive-modal-row">
+              {/*<InputGroup >
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>Phone Number</InputGroupText>
+                </InputGroupAddon> */}
               <Dropdown color="success" className="responsive-modal-row-item rev-btn"
                 isOpen={this.props.createUser.locationDropdownActive}
                 toggle={this.props.toggleLocationDropdown}>
@@ -105,37 +134,20 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
                   }
                 </DropdownMenu>
               </Dropdown>
-            </div>
-            <div className="responsive-modal-row">
-              <Input name={inputNames.FIRST_NAME}
-                className="responsive-modal-row-item"
-                placeholder="First Name"
-                onChange={this.updateNewUserInfo}
-                value={createUser.newUser.firstName}
-                valid={!!createUser.newUser.firstName}
-                invalid={!createUser.newUser.firstName} />
 
-              <Input name={inputNames.LAST_NAME}
-                className="responsive-modal-row-item"
-                placeholder="Last Name"
-                onChange={this.updateNewUserInfo}
-                value={createUser.newUser.lastName}
-                valid={!!createUser.newUser.lastName}
-                invalid={!createUser.newUser.lastName} />
-            </div>
-            <div className="responsive-modal-row">
-              <InputGroup className="responsive-modal-row-item">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>Phone Number</InputGroupText>
-                </InputGroupAddon>
-                <Input type="number"
-                  name={inputNames.PHONE}
-                  onChange={this.updateNewUserInfo}
-                  value={createUser.newUser.phoneNumber}
-                  valid={!!createUser.newUser.phoneNumber}
-                  invalid={!createUser.newUser.phoneNumber} />
-
-              </InputGroup>
+              <Dropdown color="success" className="responsive-modal-row-item rev-btn"
+                isOpen={this.props.createUser.roleDropdownActive}
+                toggle={this.props.toggleRoleDropdown}>
+                <DropdownToggle caret>
+                  {createUser.newUser.dropdownRole || 'Role'}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={() => this.props.updateNewUserRole('admin', 'Admin')}>Admin</DropdownItem>
+                  <DropdownItem onClick={() => this.props.updateNewUserRole('staging-manager', 'Staging Manager')}>Staging Manager</DropdownItem>
+                  <DropdownItem onClick={() => this.props.updateNewUserRole('trainer', 'Trainer')}>Trainer</DropdownItem>
+                  <DropdownItem onClick={() => this.props.updateNewUserRole('associate', 'Associate')}>Associate</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </ModalBody>
           <ModalFooter id="create-user-modal-footer">
