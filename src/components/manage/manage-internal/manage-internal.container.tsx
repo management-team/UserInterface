@@ -5,16 +5,16 @@ import { IState } from '../../../reducers';
 import { toggleViewUserModal, selectUserForDisplay} from "../../../actions/view-user/view-user.actions"
 
 export interface IManageInternalComponentProps {
-  manageUsers: ICognitoUser[];
+    manageUsers: ICognitoUser[];
 }
 
-const mapStateToProps= ( state: IState) => {
-  return {
-      manageUsers: state.managementState.manageUsers.manageUsers
-  }
+const mapStateToProps = (state: IState) => {
+    return {
+        manageUsers: state.managementState.manageUsers.manageUsers
+    }
 }
 
-const mapDispatchToProps= {
+const mapDispatchToProps = {
     toggleViewUserModal: toggleViewUserModal,
     selectUserForDisplay: selectUserForDisplay
 }

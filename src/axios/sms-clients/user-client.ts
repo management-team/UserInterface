@@ -18,5 +18,5 @@ export const userClient = {
     },
     findAllByEmails(emails: string[]) {
         return smsClient.post(usersContext + `/emails`, { emailList: emails });
-    },
+    }
 }
