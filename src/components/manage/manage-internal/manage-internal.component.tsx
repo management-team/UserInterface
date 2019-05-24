@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Table } from 'reactstrap';
+import { Table, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { ICognitoUser } from '../../../model/cognito-user.model';
 import ViewUserModal from '../view-user-modal/view-user-modal.container';
-
+import DropdownItem from 'react-bootstrap/DropdownItem';
 
 export interface IManageInternalComponentProps {
     manageUsers: ICognitoUser[];
