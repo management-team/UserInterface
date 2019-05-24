@@ -48,6 +48,9 @@ const initialState: ICreateCohortState = {
       lastName: '',
       phoneNumber: '',
       userId: 0,
+      role: '',
+      dropdownRole: '',
+      cohort: '',
       roles: [],
       userStatus: {
         statusId: 0,
