@@ -66,25 +66,12 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
           </thead>
           <tbody>
             {
-              /**
-               * onMouseEnter should set the hoveredUser in
-               * some state this component is subscribed to
-               * to be some user,
-               * 
-               * then the modal can reuse that same user in its state
-               * and it all be goouchi
-               * 
-               * eventually call this.props.updateUserInfo(e)
-               * 
-               * One way to solve it is to use this, but it does the operation in render and we do NOT want tha
-               * () => userClient.findOneByEmail(user.email).then(resp => this.props.updateUserInfo(resp.data))
-               */
               this.props.manageUsers.map((user) =>
                 <tr key={user.email} className="rev-table-row" onClick={this.props.toggleViewUserModal}>
                   <td></td>
                   <td></td>
                   <td>{user.email}</td>
-                  <td>{user.roles}</td>
+                  <td>{user.roles.map(role =>role.charAt(0).toUpperCase()+ role.slice(1)).join(', ')}</td> 
                 </tr>
               )
             }

@@ -35,7 +35,7 @@ export class ViewUserModal extends React.Component<IViewUserModal, any> {
 
     return (
       <Modal isOpen={this.props.viewUser.enabled}>
-          <ModalHeader className="rev-background-color">User info</ModalHeader>
+          <ModalHeader className="rev-background-color">User Info</ModalHeader>
           <ModalBody>
           
           {this.props.user.roles.some(role => (role === 'admin'))

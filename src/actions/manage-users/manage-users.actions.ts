@@ -12,39 +12,51 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
     const stagingManagerResponse = await cognitoClient.findUsersByGroup('staging-manager');
     const trainerResponse = await cognitoClient.findUsersByGroup('trainer');
 
-    adminResponse.data.Users.forEach((user: any) => { user.roles = [] });
-    stagingManagerResponse.data.Users.forEach((user: any) => { user.roles = [] });
-    trainerResponse.data.Users.forEach((user: any) => (user.roles = []));
 
-    const admins: ICognitoUser[]= adminResponse.data.Users.map((user: any) => ({
-      email: user.Attributes.find((attr: any) => attr.Name === 'email').Value,
-      roles: user.roles.concat('Admin')
-    }));
-    
-    const staging:ICognitoUser[]=stagingManagerResponse.data.Users.map((user: any) => ({
-      email: user.Attributes.find((attr: any) => attr.Name === 'email').Value,
-      roles: user.roles.concat('Staging Manager')
-    }))
-   
-   const trainer:ICognitoUser[]=trainerResponse.data.Users.map((user: any) => ({
-      email: user.Attributes.find((attr: any) => attr.Name === 'email').Value,
-      roles: user.roles.concat('Trainer')
-    }))
 
-    let response = admins.concat(staging).concat(trainer);
-    let merge = (a,b) => {
-      for (let email in b){
-        if(b.hasOwnProperty(email))
-        a[email] = b[email]
-        a.role = a.role.concat(b.role)
-      }
-      return a;
+    let userMap = new Map<string, ICognitoUser>();
+
+    for (let i = 0; i < adminResponse.data.Users.length; i++) {
+      const currentCognitoUser = adminResponse.data.Users[i];
+      let newUser: ICognitoUser = {
+        email: currentCognitoUser.Attributes.find((attr: any) => attr.Name === 'email').Value,
+        roles: []
+      };
+      newUser.roles.push('admin');
+      userMap.set(newUser.email, newUser);
     }
-    
-    console.log("This is the finished list: " + merge(admins, staging));
+    for (let i = 0; i < stagingManagerResponse.data.Users.length; i++) {
+      const currentCognitoUser = stagingManagerResponse.data.Users[i];
+      const currentEmail = currentCognitoUser.Attributes.find((attr: any) => attr.Name === 'email').Value;
+      const mapUser = userMap.get(currentEmail)
+      let newUser: ICognitoUser = mapUser ? mapUser : {
+        email: currentEmail,
+        roles: []
+      };
+
+      newUser.roles.push('staging-manager');
+      userMap.set(newUser.email, newUser);
+    }
+    for (let i = 0; i < trainerResponse.data.Users.length; i++) {
+      const currentCognitoUser = trainerResponse.data.Users[i];
+      const currentEmail = currentCognitoUser.Attributes.find((attr: any) => attr.Name === 'email').Value;
+      const mapUser = userMap.get(currentEmail)
+      let newUser: ICognitoUser = mapUser ? mapUser : {
+        email: currentEmail,
+        roles: []
+      };
+
+      newUser.roles.push('trainer');
+      userMap.set(newUser.email, newUser);
+    }
+    const mapArray = Array.from(userMap);
+
+
+    const userArray = mapArray.map(entry => entry[1]);
+
     dispatch({
       payload: {
-        manageUsers: response
+        manageUsers: userArray
       },
       type: manageUsersTypes.GET_USERS
     })
