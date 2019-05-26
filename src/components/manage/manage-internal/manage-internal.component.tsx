@@ -3,8 +3,10 @@ import { Table, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { ICognitoUser } from '../../../model/cognito-user.model';
 import ViewUserModal from '../view-user-modal/view-user-modal.container';
 import DropdownItem from 'react-bootstrap/DropdownItem';
+import { Link } from 'react-router-dom';
 
 export interface IManageInternalComponentProps {
+  updateManageUsersTable: (group: string) => void,
   manageUsers: ICognitoUser[];
 
   
@@ -52,7 +54,8 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
   constructor(props: IManageInternalComponentProps) {
     super(props);
     this.state={
-      roleDropdownList: false
+      roleDropdownList: false,
+      selectedRole: "all"
     }
   }
 
@@ -67,7 +70,11 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
     });
   }
 
+  // returns active if the role provided in the route is the routeName provided
+  isActive = (routeName: string) => ((this.state.selectedRole === routeName) ? 'manage-user-nav-item-active' : 'manage-user-nav-item')
+
   render() {
+    let path = '/management'
     return (
       <>
         <div id="manage-cohorts-nav" className="rev-background-color">
@@ -80,13 +87,25 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
               {this.state.dropDownValue}
                 </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem >All</DropdownItem>
+                <DropdownItem >
+                  <Link to= {path +"/manage/all"}
+              className={`nav-link ${this.isActive('all')}`}
+              onClick={() => this.props.updateManageUsersTable('all')}>All</Link></DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem>Admin</DropdownItem>
+                <DropdownItem>
+                  <Link to= {path +"/manage/admin"}
+              className={`nav-link ${this.isActive('admin')}`}
+              onClick={() => this.props.updateManageUsersTable('admin')}>Admin</Link></DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem>Trainer</DropdownItem>
+                <DropdownItem>
+                  <Link to= {path +"/manage/trainer"}
+              className={`nav-link ${this.isActive('trainer')}`}
+              onClick={() => this.props.updateManageUsersTable('trainer')}>Trainer</Link></DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem>Associate</DropdownItem>
+                <DropdownItem>
+                  <Link to= {path +"/manage/staging-manager"}
+              className={`nav-link ${this.isActive('staging-manager')}`}
+              onClick={() => this.props.updateManageUsersTable('staging-manager')}>Staging Manager</Link></DropdownItem>
                 <DropdownItem divider />
               </DropdownMenu>
             </Dropdown>

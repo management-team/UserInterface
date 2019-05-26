@@ -31,7 +31,7 @@ export class ManageComponenet extends React.Component<IManageComponentProps, any
       <div id="manage-users-container">
         <ManageNavComponent
           toggleCreateUserModal={this.props.toggleCreateUserModal}
-          updateManageUsersTable={this.updateManageUsersTable}
+          
           manage={this.props.match.params.manage}
           history={this.props.history} 
           location={this.props.location}
@@ -39,7 +39,9 @@ export class ManageComponenet extends React.Component<IManageComponentProps, any
 
         {/cohorts/.test(this.props.location.pathname)?
         <ManageCohortsComponent />:
-        <ManageInternalComponenet/>
+        <ManageInternalComponenet
+        updateManageUsersTable={this.updateManageUsersTable}
+        />
         }
         <CreateCohortModal />
         <CreateUserModal />

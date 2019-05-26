@@ -6,6 +6,7 @@ import { toggleViewUserModal, hoveredUser} from "../../../actions/view-user/view
 
 export interface IManageInternalComponentProps {
   manageUsers: ICognitoUser[];
+  updateManageUsersTable: (groupName: string) => void
 }
 
 const mapStateToProps= ( state: IState) => {
@@ -16,7 +17,8 @@ const mapStateToProps= ( state: IState) => {
 
 const mapDispatchToProps= {
     toggleViewUserModal: toggleViewUserModal,
-    hoveredUser: hoveredUser
+    hoveredUser: hoveredUser,
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageInternalComponenet)

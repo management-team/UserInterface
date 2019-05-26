@@ -7,12 +7,12 @@ export const manageUsersTypes = {
 }
 
 export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any) => {
+  console.log('groupName = ' + groupName)
+
   try {
     const adminResponse = await cognitoClient.findUsersByGroup('admin');
     const stagingManagerResponse = await cognitoClient.findUsersByGroup('staging-manager');
     const trainerResponse = await cognitoClient.findUsersByGroup('trainer');
-
-
 
     let userMap = new Map<string, ICognitoUser>();
 
@@ -45,15 +45,22 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
         email: currentEmail,
         roles: []
       };
-
       newUser.roles.push('trainer');
       userMap.set(newUser.email, newUser);
     }
+
     const mapArray = Array.from(userMap);
+    let userArray = new Array<ICognitoUser>();
 
+    //filter by the group name
+    if (groupName === 'all') {
+      userArray = mapArray.map(entry => entry[1]);
+    } else {
+      userArray = mapArray.map(entry => entry[1]);
+      userArray = userArray.filter(user => user.roles.some(role => role.includes(groupName)))
+    }
 
-    const userArray = mapArray.map(entry => entry[1]);
-
+    console.log('this is the array: ' + userArray.map(user => user.roles))
     dispatch({
       payload: {
         manageUsers: userArray
