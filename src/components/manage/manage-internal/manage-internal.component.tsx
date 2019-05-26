@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { Table } from 'reactstrap';
+import { Table, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { ICognitoUser } from '../../../model/cognito-user.model';
 import ViewUserModal from '../view-user-modal/view-user-modal.container';
-
+import DropdownItem from 'react-bootstrap/DropdownItem';
 
 export interface IManageInternalComponentProps {
   manageUsers: ICognitoUser[];
+
+  
   toggleViewUserModal: () => void;
   /**
    * Handles what happens when a user is hovered
@@ -49,13 +51,53 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
 
   constructor(props: IManageInternalComponentProps) {
     super(props);
+    this.state={
+      roleDropdownList: false
+    }
   }
-  
+
+  displayUserModal = (userEmail: string) => {
+    this.props.toggleViewUserModal();
+    // this.props.selectUserForDisplay(userEmail);
+  }
+
+  toggleDropdownList =() =>{
+    this.setState({
+      roleDropdownList: !this.state.roleDropdownList
+    });
+  }
 
   render() {
     return (
+      <>
+        <div id="manage-cohorts-nav" className="rev-background-color">
+          <div id="manage-cohorts-view-selection-container">
+            <div>View By Role:</div>
+            <Dropdown color="success" className="responsive-modal-row-item rev-btn"
+              isOpen={this.state.roleDropdownList} toggle={this.toggleDropdownList}>
+              {/* toggle={this.props.toggleViewUserModal}> */}
+              <DropdownToggle caret>
+                Selection
+                </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>All</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>Admin</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>Trainer</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>Associate</DropdownItem>
+                <DropdownItem divider />
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+
+          {/* <div>
+            <Button className="responsive-modal-row-item rev-btn" onClick={this.props.toggleCreateCohortModal}>New Cohort</Button>
+          </div> */}
+        </div>
         <Table striped id="manage-users-table">
-        <ViewUserModal/>
+          <ViewUserModal />
           <thead className="rev-background-color">
             <tr>
               <th>First Name</th>
@@ -77,7 +119,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
             }
           </tbody>
         </Table>
-        
+      </>
     )
   }
 }
