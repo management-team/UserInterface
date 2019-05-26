@@ -77,10 +77,10 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
               isOpen={this.state.roleDropdownList} toggle={this.toggleDropdownList}>
               {/* toggle={this.props.toggleViewUserModal}> */}
               <DropdownToggle caret>
-                Selection
+              {this.state.dropDownValue}
                 </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem>All</DropdownItem>
+                <DropdownItem >All</DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>Admin</DropdownItem>
                 <DropdownItem divider />
