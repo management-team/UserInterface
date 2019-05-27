@@ -18,10 +18,9 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
         super(props);
     }
 
-    componentDidMount() {
-        this.props.updateLocations();
-        this.props.manageGetUsersByGroup('trainer');
-    }
+  componentDidMount() {
+    this.props.updateLocations();
+  }
 
     updateNewCohortInfo = (e: React.FormEvent) => {
         let updatedNewCohort = this.props.createCohort.newCohort;

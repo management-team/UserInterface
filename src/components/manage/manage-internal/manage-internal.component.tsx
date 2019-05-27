@@ -1,17 +1,20 @@
 import * as React from 'react';
-import { Table } from 'reactstrap';
+import { Table, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { ICognitoUser } from '../../../model/cognito-user.model';
 import ViewUserModal from '../view-user-modal/view-user-modal.container';
+import DropdownItem from 'react-bootstrap/DropdownItem';
+import { Link } from 'react-router-dom';
 
 export interface IManageInternalComponentProps {
-    manageUsers: ICognitoUser[];
-    toggleViewUserModal: () => void;
-    /**
-     * Handles what happens when a user is hovered
-     * 
-     * @param email: The email address of the hovered user
-     */
-    selectUserForDisplay: (email: string) => void;
+  updateManageUsersTable: (group: string) => void,
+  manageUsers: ICognitoUser[];
+  toggleViewUserModal: () => void;
+  /**
+   * Handles what happens when a user is hovered
+   * 
+   * @param email: The email address of the hovered user
+   */
+  selectUserForDisplay: (email: string) => void;
 }
 /**
  * {v}: dropdown with further info
@@ -46,57 +49,98 @@ export interface IManageInternalComponentProps {
 
 export class ManageInternalComponenet extends React.Component<IManageInternalComponentProps, any> {
 
-
-    constructor(props: IManageInternalComponentProps) {
-        super(props);
+  constructor(props: IManageInternalComponentProps) {
+    super(props);
+    this.state={
+      roleDropdownList: false,
+      dropDownValue: "all"
     }
+  }
 
     displayUserModal = (userEmail: string) => {
         this.props.selectUserForDisplay(userEmail);
         this.props.toggleViewUserModal();
     }
 
+  toggleDropdownList =() =>{
+    this.setState({
+      roleDropdownList: !this.state.roleDropdownList
+    });
+  }
+  updateDropdown =(option: string) => {
+    this.props.updateManageUsersTable(option)
+    this.setState({dropDownValue: option})
+  } 
 
-    render() {
-        return (
-            <Table striped id="manage-users-table">
-                <ViewUserModal />
-                <thead className="rev-background-color">
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Roles</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        /**
-                         * onMouseEnter should set the hoveredUser in
-                         * some state this component is subscribed to
-                         * to be some user,
-                         * 
-                         * then the modal can reuse that same user in its state
-                         * and it all be goouchi
-                         * 
-                         * eventually call this.props.updateUserInfo(e)
-                         * 
-                         * One way to solve it is to use this, but it does the operation in render and we do NOT want tha
-                         * () => userClient.findOneByEmail(user.email).then(resp => this.props.updateUserInfo(resp.data))
-                         */
-                        this.props.manageUsers.map((user) =>
-                            <tr key={user.email} className="rev-table-row"
-                                onClick={() => this.displayUserModal(user.email)}>
-                                <td>{user.firstName}</td>
-                                <td>{user.lastName}</td>
-                                <td>{user.email}</td>
-                                <td>{user.roles}</td>
-                            </tr>
-                        )
-                    }
-                </tbody>
-            </Table>
+  // returns active if the role provided in the route is the routeName provided
+  isActive = (routeName: string) => ((this.state.selectedRole === routeName) ? 'manage-user-nav-item-active' : 'manage-user-nav-item')
 
-        )
-    }
+  render() {
+    let path = '/management'
+    return (
+      <>
+        <div id="manage-cohorts-nav" className="rev-background-color">
+          <div id="manage-cohorts-view-selection-container">
+            <div>View By Role:</div>
+            <Dropdown color="success" className="responsive-modal-row-item rev-btn"
+              isOpen={this.state.roleDropdownList} toggle={this.toggleDropdownList}>
+              {/* toggle={this.props.toggleViewUserModal}> */}
+              <DropdownToggle caret>
+              {this.state.dropDownValue}
+                </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem >
+                  <Link to= {path +"/manage/all"}
+              className={`nav-link ${this.isActive('all')}`}
+              onClick={() => this.updateDropdown('all') }>All</Link></DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>
+                  <Link to= {path +"/manage/admin"}
+              className={`nav-link ${this.isActive('admin')}`}
+              onClick={() => this.updateDropdown('admin')}>Admin</Link></DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>
+                  <Link to= {path +"/manage/trainer"}
+              className={`nav-link ${this.isActive('trainer')}`}
+              onClick={() => this.updateDropdown('trainer')}>Trainer</Link></DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>
+                  <Link to= {path +"/manage/staging-manager"}
+              className={`nav-link ${this.isActive('staging-manager')}`}
+              onClick={() => this.updateDropdown('staging-manager')}>Staging Manager</Link></DropdownItem>
+                <DropdownItem divider />
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+
+          {/* <div>
+            <Button className="responsive-modal-row-item rev-btn" onClick={this.props.toggleCreateCohortModal}>New Cohort</Button>
+          </div> */}
+        </div>
+        <Table striped id="manage-users-table">
+          <ViewUserModal />
+          <thead className="rev-background-color">
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Roles</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this.props.manageUsers.map((user) =>
+                <tr key={user.email} className="rev-table-row" onClick={this.props.toggleViewUserModal}>
+                  <td></td>
+                  <td></td>
+                  <td>{user.email}</td>
+                  <td>{user.roles.map(role =>role.charAt(0).toUpperCase()+ role.slice(1)).join(', ')}</td> 
+                </tr>
+              )
+            }
+          </tbody>
+        </Table>
+      </>
+    )
+  }
 }
