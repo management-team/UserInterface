@@ -131,8 +131,8 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
             {
               this.props.manageUsers.map((user) =>
                 <tr key={user.email} className="rev-table-row" onClick={this.props.toggleViewUserModal}>
-                  <td></td>
-                  <td></td>
+                  <td>{user.firstName}</td>
+                  <td>{user.lastName}</td>
                   <td>{user.email}</td>
                   <td>{user.roles.map(role =>role.charAt(0).toUpperCase()+ role.slice(1)).join(', ')}</td> 
                 </tr>

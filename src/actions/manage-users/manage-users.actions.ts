@@ -1,6 +1,7 @@
 import { cognitoClient } from "../../axios/sms-clients/cognito-client";
 import { toast } from "react-toastify";
 import { ICognitoUser } from "../../model/cognito-user.model";
+import { userClient } from "../../axios/sms-clients/user-client";
 
 export const manageUsersTypes = {
     GET_USERS: 'MANAGE_GET_USERS',
@@ -48,15 +49,27 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
       newUser.roles.push('trainer');
       userMap.set(newUser.email, newUser);
     }
-
+    //change map to array
     const mapArray = Array.from(userMap);
     let userArray = new Array<ICognitoUser>();
+    userArray = mapArray.map(entry => entry[1]);
 
+    //add user names
+    const emailList: string[] = userArray.map(user => user.email )
+    const userInfoResp = await userClient.findAllByEmails(emailList);
+    
+    for ( let i = 0; i < userInfoResp.data.length; i++){
+      const respEmail = userInfoResp.data[i].email;
+      for (let j = 0; j < userArray.length; j++){
+        if(userArray[j].email === respEmail){
+          userArray[j].firstName = userInfoResp.data[i].firstName;
+          userArray[j].lastName = userInfoResp.data[i].lastName;
+        }
+      } 
+    }
+  
     //filter by the group name
-    if (groupName === 'all') {
-      userArray = mapArray.map(entry => entry[1]);
-    } else {
-      userArray = mapArray.map(entry => entry[1]);
+    if (groupName !== 'all') {
       userArray = userArray.filter(user => user.roles.some(role => role.includes(groupName)))
     }
 
