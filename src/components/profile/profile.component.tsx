@@ -189,6 +189,25 @@ class Profile extends Component<IProfileProps, any> {
                   </DropdownMenu>
                 </Dropdown>
                 }
+                <Col>
+                <FormGroup checkedRoles>
+          <Label Roles>
+            {/* <Input 
+            type="checkbox" 
+            value={this.props.userToView.roles[0]}/>Admin
+            <Input 
+            type="checkbox" 
+            value={this.props.userToView.roles[1]}/>Trainer
+            <Input 
+            type="checkbox" 
+            value={this.props.userToView.roles.map(role => role)}/>Staging Manager
+            <Input 
+            type="checkbox" 
+            value={this.props.userToView.roles.map(role => role)}/>Associtate */}
+
+          </Label>
+        </FormGroup>
+        </Col>
              </Col>
           </Row>
           <Row>
