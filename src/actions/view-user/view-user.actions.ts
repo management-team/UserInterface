@@ -1,5 +1,6 @@
 import { IUser } from "../../model/user.model";
 import { userClient } from "../../axios/sms-clients/user-client";
+import { ICognitoUser } from "../../model/cognito-user.model";
 
 export const viewUserTypes = {
     TOGGLE: 'TOGGLE_VIEW_USER_MODAL',
@@ -25,11 +26,13 @@ export const hoveredUser = (email: string) => async (dispatch: (action: any) => 
     })
 }
 
-export const selectUserForDisplay = (email: string) => async (dispatch: (action: any) => void) => {
-  const resp = await userClient.findOneByEmail(email);
+export const selectUserForDisplay = (selectedUser: ICognitoUser) => async (dispatch: (action: any) => void) => {
+  let resp = await userClient.findOneByEmail(selectedUser.email);
+  const roles = selectedUser.roles
+  const userWithRoles = {...resp.data, roles}
   dispatch ({
       payload: {
-          newUser: resp.data
+          newUser: userWithRoles
       },
       type: viewUserTypes.VIEW_USER
   })

@@ -14,7 +14,7 @@ export interface IManageInternalComponentProps {
    * 
    * @param email: The email address of the hovered user
    */
-  selectUserForDisplay: (email: string) => void;
+  selectUserForDisplay: (selectedUser: ICognitoUser) => void;
 }
 /**
  * {v}: dropdown with further info
@@ -57,8 +57,8 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
     }
   }
 
-    displayUserModal = (userEmail: string) => {
-        this.props.selectUserForDisplay(userEmail);
+    displayUserModal = (selectedUser: ICognitoUser) => {
+        this.props.selectUserForDisplay(selectedUser);
         this.props.toggleViewUserModal();
     }
 
