@@ -31,7 +31,7 @@ const initialState: IProfileViewState = {
             statusId: 0,
             generalStatus: '',
             specificStatus: '',
-            virtual: false     
+            virtual: false
         },
         roles: []
     },
@@ -91,15 +91,16 @@ export const profileViewReducer = (state = initialState, action: any) => {
                 ...state,
                 user: {
                     ...state.user,
-                    userStatus: action.payload.status}
+                    userStatus: action.payload.status
+                }
             }
         case profileTypes.UPDATE_VIRTUAL_STATUS_CHECKBOX:
             return {
                 ...state,
                 virtual: !state.virtual
             }
-    
-    
+
+
     }
     return state;
 }
