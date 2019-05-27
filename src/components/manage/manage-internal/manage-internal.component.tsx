@@ -55,7 +55,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
     super(props);
     this.state={
       roleDropdownList: false,
-      selectedRole: "all"
+      dropDownValue: "all"
     }
   }
 
@@ -69,6 +69,10 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
       roleDropdownList: !this.state.roleDropdownList
     });
   }
+  updateDropdown =(option: string) => {
+    this.props.updateManageUsersTable(option)
+    this.setState({dropDownValue: option})
+  } 
 
   // returns active if the role provided in the route is the routeName provided
   isActive = (routeName: string) => ((this.state.selectedRole === routeName) ? 'manage-user-nav-item-active' : 'manage-user-nav-item')
@@ -90,22 +94,22 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                 <DropdownItem >
                   <Link to= {path +"/manage/all"}
               className={`nav-link ${this.isActive('all')}`}
-              onClick={() => this.props.updateManageUsersTable('all')}>All</Link></DropdownItem>
+              onClick={() => this.updateDropdown('all') }>All</Link></DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
                   <Link to= {path +"/manage/admin"}
               className={`nav-link ${this.isActive('admin')}`}
-              onClick={() => this.props.updateManageUsersTable('admin')}>Admin</Link></DropdownItem>
+              onClick={() => this.updateDropdown('admin')}>Admin</Link></DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
                   <Link to= {path +"/manage/trainer"}
               className={`nav-link ${this.isActive('trainer')}`}
-              onClick={() => this.props.updateManageUsersTable('trainer')}>Trainer</Link></DropdownItem>
+              onClick={() => this.updateDropdown('trainer')}>Trainer</Link></DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
                   <Link to= {path +"/manage/staging-manager"}
               className={`nav-link ${this.isActive('staging-manager')}`}
-              onClick={() => this.props.updateManageUsersTable('staging-manager')}>Staging Manager</Link></DropdownItem>
+              onClick={() => this.updateDropdown('staging-manager')}>Staging Manager</Link></DropdownItem>
                 <DropdownItem divider />
               </DropdownMenu>
             </Dropdown>
