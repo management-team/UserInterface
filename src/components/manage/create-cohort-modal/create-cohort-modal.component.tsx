@@ -5,12 +5,14 @@ import {
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import { ICreateCohortModal } from './create-cohort-modal.container';
-import { CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 
 const inputNames = {
     DESCRIPTION: 'NEW_COHORT_DESCRIPTION',
     NAME: 'NEW_COHORT_NAME',
+    START_DATE: 'NEW_START_DATE',
+    END_DATE: 'NEW_END_DATE'
 }
 
 export class CreateCohortModal extends React.Component<ICreateCohortModal, any> {
@@ -23,25 +25,40 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
         this.props.manageGetUsersByGroup('trainer');
     }
 
-    updateNewCohortInfo = (e: React.FormEvent) => {
+    updateNewCohortInfo = (e) => {
         let updatedNewCohort = this.props.createCohort.newCohort;
         const target = e.target as HTMLSelectElement;
+        const changeValue = e as React.ChangeEvent<HTMLInputElement>;
+        console.log(changeValue.target.value);
         switch (target.name) {
             case inputNames.DESCRIPTION:
                 updatedNewCohort = {
                     ...updatedNewCohort,
-                    cohortDescription: target.value
+                    cohortDescription: changeValue.target.value
                 }
                 break;
             case inputNames.NAME:
                 updatedNewCohort = {
                     ...updatedNewCohort,
-                    cohortName: target.value
+                    cohortName: changeValue.target.value
+                }
+                break;
+            case inputNames.START_DATE:
+                updatedNewCohort = {
+                    ...updatedNewCohort,
+                    startDate: changeValue.target.value
+                }
+                break;
+            case inputNames.END_DATE:
+                updatedNewCohort = {
+                    ...updatedNewCohort,
+                    endDate: changeValue.target.value
                 }
                 break;
             default:
                 break;
         }
+        console.log(updatedNewCohort);
         this.props.updateNewCohort(updatedNewCohort)
         console.log(updatedNewCohort);
     }
@@ -56,7 +73,7 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
     //     const cohortLocation = `${window.location.origin.toString()}` +
     //         `/management/joincohort/${createCohort.newCohort.cohortToken}`;
 
-        
+
     // }
 
     getNewCohortJoinPath = (window, createCohort) => {
@@ -104,6 +121,22 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
                             </Dropdown>
                         </div>
                         <div className="responsive-modal-row">
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">start</InputGroupAddon>
+                                <Input name={inputNames.START_DATE} type="date" placeholder="date"
+                                    value={createCohort.newCohort.startDate}
+                                    onChange={this.updateNewCohortInfo}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">end</InputGroupAddon>
+                                <Input name={inputNames.END_DATE} type="date" placeholder="date"
+                                    value={createCohort.newCohort.endDate}
+                                    onChange={this.updateNewCohortInfo}
+                                />
+                            </InputGroup>
+                        </div>
+                        <div className="responsive-modal-row">
                             <textarea name={inputNames.DESCRIPTION}
                                 className="responsive-modal-row-item"
                                 placeholder="Description"
@@ -139,7 +172,7 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
                                         disabled value={this.getNewCohortJoinPath(window, createCohort)}></Input>
                                     <CopyToClipboard
                                         text={this.getNewCohortJoinPath(window, createCohort)}>
-                                        <Button>Copy-to-clipboard</Button>
+                                        <Button>Copy</Button>
                                     </CopyToClipboard>
                                 </div>
                             }
