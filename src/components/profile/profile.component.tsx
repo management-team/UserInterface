@@ -192,7 +192,6 @@ class Profile extends Component<IProfileProps, any> {
              </Col>
           </Row>
           <Row>
-            
             <Col md={4}>
               <FormGroup>
                 <Label>Firstname</Label>
@@ -339,6 +338,42 @@ class Profile extends Component<IProfileProps, any> {
                 />
                 
             </Col>}
+            <Col>
+            <Label>Roles</Label> 
+            <br/>
+          <FormGroup checkedRoles>
+          <Label Roles>
+            <Input 
+            type="checkbox" 
+            value="admin"
+            checked= {this.props.userToView.roles.some(roles => roles.includes('admin'))} /> Admin
+            </Label>
+            </FormGroup>
+            <FormGroup checkedRoles>
+          <Label Roles>
+            <Input 
+            type="checkbox" 
+            value="trainer"
+            checked= {this.props.userToView.roles.some(roles => roles.includes('trainer'))} />Trainer
+             </Label>
+            </FormGroup>
+            <FormGroup checkedRoles>
+          <Label Roles>
+            <Input 
+            type="checkbox" 
+            value="staging-manager"
+            checked= {this.props.userToView.roles.some(roles => roles.includes('staging-manager'))}/>Staging-Manager
+             </Label>
+            </FormGroup>
+            <FormGroup checkedRoles>
+          <Label Roles>
+            <Input 
+            type="checkbox" 
+            value="associtate"
+            checked= {this.props.userToView.roles.some(roles => roles.includes('admin'||'staging-manager'||'trainer'))}/>Associtate
+          </Label>
+        </FormGroup>
+        </Col>
         </Row>  
         <br/>
         <Button>Update</Button>

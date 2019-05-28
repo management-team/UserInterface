@@ -65,11 +65,11 @@ export interface IAuthState {
     userStatus: IStatus[],
     
   }
-  
+  //list of emails and roles for users used to populate table
   export interface IManageUsersState {
     manageUsers: ICognitoUser[];
   }
-
+ //current user logged in
   export interface ICurrentSMSUserState {
     currentSMSUser: IUser
   }
@@ -134,6 +134,7 @@ export interface ICohortModalState {
     resetPassword: IResetPasswordState,
     resetPasswordUsername: IResetPasswordUsernameState,
     login: ILoginState,
+    statusDropdownActive: boolean;
   }
 
   export const managementState = combineReducers<IManagementState>({
