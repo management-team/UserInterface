@@ -5,7 +5,7 @@ import {
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import { ICreateCohortModal } from './create-cohort-modal.container';
-import { NavLink } from 'react-router-dom';
+import { CopyToClipboard} from 'react-copy-to-clipboard';
 
 
 const inputNames = {
@@ -52,33 +52,17 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
         this.props.saveCohort(this.props.createCohort.newCohort);
     }
 
-    testRender = (windowAny) => {
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log(windowAny)
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
-        console.log("test")
+    // goToCohortPage = (window, createCohort) => {
+    //     const cohortLocation = `${window.location.origin.toString()}` +
+    //         `/management/joincohort/${createCohort.newCohort.cohortToken}`;
+
+        
+    // }
+
+    getNewCohortJoinPath = (window, createCohort) => {
+        return `${window.location.origin.toString()}` +
+            `/management/joincohort/${createCohort.newCohort.cohortToken}`;
     }
-
-
 
     render() {
 
@@ -148,24 +132,16 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
                                 </DropdownMenu>
                             </Dropdown>
                         </div>
-                        <div>testRender
-                            {createCohort.isSaved && this.testRender(window.location)}
-                            {createCohort.isSaved && 'Link: '}
+                        <div>
                             {createCohort.isSaved &&
-                                <>
-                                    < NavLink to={`${window.location.origin.toString()}` +
-                                        `/management/joincohort/${createCohort.newCohort.cohortToken}`} >
-                                        {createCohort.newCohort.cohortName}
-                                    </NavLink >
-                                    <NavLink exact to={`${window.location.origin.toString()}` +
-                                        `/management/joincohort/${createCohort.newCohort.cohortToken}`} >
-                                        {createCohort.newCohort.cohortName}
-                                    </NavLink >
-                                    <NavLink strict to={`${window.location.origin.toString()}` +
-                                        `/management/joincohort/${createCohort.newCohort.cohortToken}`} >
-                                        {createCohort.newCohort.cohortName}
-                                    </NavLink >
-                                </>
+                                <div className="responsive-modal-row">
+                                    link: <Input className="horizontal-scroll"
+                                        disabled value={this.getNewCohortJoinPath(window, createCohort)}></Input>
+                                    <CopyToClipboard
+                                        text={this.getNewCohortJoinPath(window, createCohort)}>
+                                        <Button>Copy-to-clipboard</Button>
+                                    </CopyToClipboard>
+                                </div>
                             }
                             <br />
                         </div>
