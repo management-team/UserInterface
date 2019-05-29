@@ -16,6 +16,7 @@ export const profileTypes = {
     USER_UPDATE_SUCCESSFUL: 'PROFILE_USER_UPDATE_SUCCESSFUL',
     UPDATE_USER_STATUS: 'UPDATE_USER_STATUS',
     TOGGLE_STATUS_DROPDOWN: 'TOGGLE_STATUS_DROPDOWN',
+    TOGGLE_COHORT_DROPDOWN: 'TOGGLE_COHORT_DROPDOWN',
     UPDATE_VIRTUAL_STATUS_CHECKBOX: 'UPDATE_VIRTUAL_STATUS_CHECKBOX',
 }
 
@@ -67,6 +68,13 @@ export const toggleStatusDropdown = () => {
     return {
         payload: {},
         type: profileTypes.TOGGLE_STATUS_DROPDOWN
+    }
+}
+
+export const toggleCohortDropdown = () => {
+    return {
+        payload: {},
+        type: profileTypes.TOGGLE_COHORT_DROPDOWN
     }
 }
 

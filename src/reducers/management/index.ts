@@ -114,6 +114,7 @@ export interface ICohortModalState {
     bUserInfoChanged: boolean,
     locationDropdownActive: boolean,
     statusDropdownActive: boolean,
+    cohortDropdownActive: boolean,
     virtual:boolean,
   }
 
