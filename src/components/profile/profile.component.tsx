@@ -1,6 +1,8 @@
-import  React, { Component, FormEvent } from 'react';
-import { Container, Form, Row, FormGroup, Label, Input, 
-  Col, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import React, { Component, FormEvent } from 'react';
+import {
+  Container, Form, Row, FormGroup, Label, Input,
+  Col, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem
+} from 'reactstrap';
 import { IAddress } from '../../model/address.model';
 import { IProfileProps } from './profile.container';
 
@@ -39,7 +41,7 @@ class Profile extends Component<IProfileProps, any> {
 
   onUserInfoChangeHandler = (event: React.FormEvent) => {
     let updatedUser = this.props.userToView;
-    
+
     const target = event.target as HTMLSelectElement;
     switch (target.name) {
       case inputNames.EMAIL:
@@ -75,7 +77,7 @@ class Profile extends Component<IProfileProps, any> {
           }
         }
         break;
-        case inputNames.CITY:
+      case inputNames.CITY:
         updatedUser = {
           ...updatedUser,
           personalAddress: {
@@ -84,7 +86,7 @@ class Profile extends Component<IProfileProps, any> {
           }
         }
         break;
-        case inputNames.STATE:
+      case inputNames.STATE:
         updatedUser = {
           ...updatedUser,
           personalAddress: {
@@ -93,7 +95,7 @@ class Profile extends Component<IProfileProps, any> {
           }
         }
         break;
-        case inputNames.ZIP:
+      case inputNames.ZIP:
         updatedUser = {
           ...updatedUser,
           personalAddress: {
@@ -102,7 +104,7 @@ class Profile extends Component<IProfileProps, any> {
           }
         }
         break;
-        case inputNames.COUNTRY:
+      case inputNames.COUNTRY:
         updatedUser = {
           ...updatedUser,
           personalAddress: {
@@ -144,7 +146,7 @@ class Profile extends Component<IProfileProps, any> {
   // this.props.updateUserStatus(status.virtual);
   // }
   render() {
-    const {userToView, trainingAddresses, allStatus} = this.props;
+    const { userToView, trainingAddresses, allStatus } = this.props;
     // const Checkbox = props => (
     //   <input type="checkbox" {...props} />
     // )
@@ -155,16 +157,16 @@ class Profile extends Component<IProfileProps, any> {
             <Col md={4}>
               <FormGroup>
                 <Label>Email</Label>
-                <Input 
-                  type="email" 
-                  name={inputNames.EMAIL} 
+                <Input
+                  type="email"
+                  name={inputNames.EMAIL}
                   value={userToView.email} readOnly />
               </FormGroup>
-             </Col>
-             <Col md={4}>
-                <Label>Training Location</Label>
-                {this.props.currentSMSUser.roles.length === 0 ?
-                  <p><strong>{userToView.trainingAddress && userToView.trainingAddress.alias}</strong></p> 
+            </Col>
+            <Col md={4}>
+              <Label>Training Location</Label>
+              {this.props.currentSMSUser.roles.length === 0 ?
+                <p><strong>{userToView.trainingAddress && userToView.trainingAddress.alias}</strong></p>
                 :
                 <Dropdown
                   color="success" className="responsive-modal-row-item rev-btn"
@@ -174,29 +176,29 @@ class Profile extends Component<IProfileProps, any> {
                     {userToView.trainingAddress && userToView.trainingAddress.alias || 'No Location'}
                   </DropdownToggle>
                   <DropdownMenu name={inputNames.TRAINING_ALIASES}>
-                  {
-                    trainingAddresses.trainingAddresses.length === 0
-                      ? <>
-                        <DropdownItem>Unable To Find Any Locations</DropdownItem>
-                        <DropdownItem divider />
-                      </>
-                      : trainingAddresses.trainingAddresses.map(location =>
-                        <DropdownItem 
-                          key={location.addressId}
-                          onClick={() => this.props.updateUserTrainingLocation(location)} >{location.alias}</DropdownItem>
-                      )
-                  } 
+                    {
+                      trainingAddresses.trainingAddresses.length === 0
+                        ? <>
+                          <DropdownItem>Unable To Find Any Locations</DropdownItem>
+                          <DropdownItem divider />
+                        </>
+                        : trainingAddresses.trainingAddresses.map(location =>
+                          <DropdownItem
+                            key={location.addressId}
+                            onClick={() => this.props.updateUserTrainingLocation(location)} >{location.alias}</DropdownItem>
+                        )
+                    }
                   </DropdownMenu>
                 </Dropdown>
-                }
-             </Col>
+              }
+            </Col>
           </Row>
           <Row>
             <Col md={4}>
               <FormGroup>
-                <Label>Firstname</Label>
-                <Input 
-                  type="text" 
+                <Label>First Name</Label>
+                <Input
+                  type="text"
                   name={inputNames.FIRST_NAME}
                   value={userToView.firstName}
                   onChange={(event) => this.onUserInfoChangeHandler(event)} required />
@@ -204,9 +206,9 @@ class Profile extends Component<IProfileProps, any> {
             </Col>
             <Col md={4}>
               <FormGroup>
-                <Label>Lastname</Label>
-                <Input 
-                  type="text" 
+                <Label>Last Name</Label>
+                <Input
+                  type="text"
                   name={inputNames.LAST_NAME}
                   value={userToView.lastName}
                   onChange={(event) => this.onUserInfoChangeHandler(event)} required />
@@ -215,8 +217,8 @@ class Profile extends Component<IProfileProps, any> {
             <Col md={4}>
               <FormGroup>
                 <Label>Phone Number</Label>
-                <Input 
-                  type="tel" 
+                <Input
+                  type="tel"
                   pattern="^([0-9]( |-)?)?(\(?[0-9]{3}\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4}|[a-zA-Z0-9]{7})$"
                   name={inputNames.PHONE}
                   value={userToView.phoneNumber}
@@ -224,160 +226,181 @@ class Profile extends Component<IProfileProps, any> {
               </FormGroup>
             </Col>
           </Row>
-        <FormGroup>
-          <Label>Street</Label>
-          <Input
-            type="text" 
-            name={inputNames.STREET}
-            value={userToView.personalAddress && userToView.personalAddress.street}
-            onChange={(event) => this.onUserInfoChangeHandler(event)} />
-        </FormGroup>
-        <Row>
-          <Col md={6}>
-            <FormGroup>
-              <Label>City</Label>
-              <Input 
-                type="text" 
-                name={inputNames.CITY}  
-                value={userToView.personalAddress && userToView.personalAddress.city}
-                onChange={(event) => this.onUserInfoChangeHandler(event)} />
-            </FormGroup>
-          </Col>
-          <Col md={4}>
-            <FormGroup>
-              <Label>State</Label>
-              <Input 
-                type="text" 
-                name={inputNames.STATE}
-                value={userToView.personalAddress && userToView.personalAddress.state}
-                onChange={(event) => this.onUserInfoChangeHandler(event)} />
-            </FormGroup>
-          </Col>
-          <Col md={2}>
-            <FormGroup>
-              <Label>Zip</Label>
-              <Input 
-                type="text" 
-                name={inputNames.ZIP}
-                value={userToView.personalAddress && userToView.personalAddress.zip}
-                onChange={(event) => this.onUserInfoChangeHandler(event)} />
-            </FormGroup>  
-          </Col>
-        </Row>
-        <Row>
-         <Col md={3}>
           <FormGroup>
-            <Label>Country</Label>
+            <Label>Street</Label>
             <Input
               type="text"
-              name={inputNames.COUNTRY}
-              value={userToView.personalAddress && userToView.personalAddress.country}
+              name={inputNames.STREET}
+              value={userToView.personalAddress && userToView.personalAddress.street}
               onChange={(event) => this.onUserInfoChangeHandler(event)} />
           </FormGroup>
-          </Col>
-        </Row>
-
-            <Row>
-                <Col md={4}>
+          <Row>
+            <Col md={4}>
+              <FormGroup>
+                <Label>City</Label>
+                <Input
+                  type="text"
+                  name={inputNames.CITY}
+                  value={userToView.personalAddress && userToView.personalAddress.city}
+                  onChange={(event) => this.onUserInfoChangeHandler(event)} />
+              </FormGroup>
+            </Col>
+            <Col md={3}>
+              <FormGroup>
+                <Label>State</Label>
+                <Input
+                  type="text"
+                  name={inputNames.STATE}
+                  value={userToView.personalAddress && userToView.personalAddress.state}
+                  onChange={(event) => this.onUserInfoChangeHandler(event)} />
+              </FormGroup>
+            </Col>
+            <Col md={2}>
+              <FormGroup>
+                <Label>Zip</Label>
+                <Input
+                  type="text"
+                  name={inputNames.ZIP}
+                  value={userToView.personalAddress && userToView.personalAddress.zip}
+                  onChange={(event) => this.onUserInfoChangeHandler(event)} />
+              </FormGroup>
+            </Col>
+            <Col md={3}>
+              <FormGroup>
+                <Label>Country</Label>
+                <Input
+                  type="text"
+                  name={inputNames.COUNTRY}
+                  value={userToView.personalAddress && userToView.personalAddress.country}
+                  onChange={(event) => this.onUserInfoChangeHandler(event)} />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={4}>
+              <Row>
                 <Col>
-                    <Label>Status:</Label>
-                    <Dropdown
-                        color="success" className="responsive-modal-row-item rev-btn"
+                  <Label>Status:</Label>
+                  <Dropdown
+                    color="success" className="responsive-modal-row-item rev-btn"
                     isOpen={this.props.statusDropdownActive}
                     toggle={this.props.toggleStatusDropdown}>
                     <DropdownToggle caret>
-                        {userToView.userStatus && userToView.userStatus.generalStatus && userToView.userStatus.specificStatus || 'No Status'}
+                      {userToView.userStatus && userToView.userStatus.generalStatus && userToView.userStatus.specificStatus || 'No Status'}
                     </DropdownToggle>
                     <DropdownMenu name={inputNames.STATUS_ALIASES}>
-                        {
-                            allStatus.userStatus.length === 0
-                            ? <>
+                      {
+                        allStatus.userStatus.length === 0
+                          ? <>
                             <DropdownItem>Unable To Find Any Statuses</DropdownItem>
                             <DropdownItem divider />
-                            </>
-                            : allStatus.userStatus.filter(status =>{
-                              if(status.specificStatus === 'Training' || status.specificStatus === 'Dropped'|| status.specificStatus === 'Complete'){
+                          </>
+                          : allStatus.userStatus.filter(status => {
+                            if (status.specificStatus === 'Training' || status.specificStatus === 'Dropped' || status.specificStatus === 'Complete') {
+                              return true;
+                            }
+                            if (this.props.virtual) {
+                              if (status.virtual) {
                                 return true;
+                              } else {
+                                return false
                               }
-                              if(this.props.virtual){
-                                if(status.virtual){
-                                  return true;
-                                }else{
-                                  return false
-                                }
-                              }else{
-                                if(!status.virtual){
-                                  return true;
-                                } else {
-                                  return false;
-                                }
+                            } else {
+                              if (!status.virtual) {
+                                return true;
+                              } else {
+                                return false;
                               }
-                            }).map(status =>
-                            <DropdownItem 
-                            key={status.statusId}
-                            statusValue = {status.specificStatus}
-                            onClick={() => this.props.updateUserStatus(status)} >{status.specificStatus}</DropdownItem>
-                            )
-                        } 
-                        </DropdownMenu>
-                    </Dropdown> 
+                            }
+                          }).map(status =>
+                            <DropdownItem
+                              key={status.statusId}
+                              statusValue={status.specificStatus}
+                              onClick={() => this.props.updateUserStatus(status)} >{status.specificStatus}</DropdownItem>
+                          )
+                      }
+                    </DropdownMenu>
+                  </Dropdown>
                 </Col>
-            </Col>
-            { <Col md={4}>
-            <Label>Virtual:</Label>
-            <br/>
-              <Input
-                type="checkbox"
-                checked={this.props.userToView.userStatus.virtual}
-                onChange={() => this.props.handleCheckboxChange(this.props.allStatus.userStatus.filter(status=>{
-                  if(status.specificStatus === userToView.userStatus.specificStatus && status.virtual !== userToView.userStatus.virtual){
-                    return true;
-                  } else
-                  return false;
-                })[0] )}
+              </Row>
+              <Row style={{ margin: '2em', }}>
+                <Label>Virtual:</Label>
+                <br />
+                <Input
+                  type="checkbox"
+                  checked={this.props.userToView.userStatus.virtual}
+                  onChange={() => this.props.handleCheckboxChange(this.props.allStatus.userStatus.filter(status => {
+                    if (status.specificStatus === userToView.userStatus.specificStatus && status.virtual !== userToView.userStatus.virtual) {
+                      return true;
+                    } else
+                      return false;
+                  })[0])}
                 />
-                
-            </Col>}
+              </Row>
+            </Col>
             <Col>
-            <Label>Roles</Label> 
-            <br/>
-          <FormGroup checkedRoles>
-          <Label Roles>
-            <Input 
-            type="checkbox" 
-            value="admin"
-            checked= {this.props.userToView.roles.some(roles => roles.includes('admin'))} /> Admin
+              <Label>Roles</Label>
+              <br />
+              <FormGroup checkedRoles>
+                <Label Roles>
+                  <Input
+                    type="checkbox"
+                    value="admin"
+                    checked={this.props.userToView.roles.some(roles => roles.includes('admin'))} /> Admin
             </Label>
-            </FormGroup>
-            <FormGroup checkedRoles>
-          <Label Roles>
-            <Input 
-            type="checkbox" 
-            value="trainer"
-            checked= {this.props.userToView.roles.some(roles => roles.includes('trainer'))} />Trainer
+              </FormGroup>
+              <FormGroup checkedRoles>
+                <Label Roles>
+                  <Input
+                    type="checkbox"
+                    value="trainer"
+                    checked={this.props.userToView.roles.some(roles => roles.includes('trainer'))} />Trainer
              </Label>
-            </FormGroup>
-            <FormGroup checkedRoles>
-          <Label Roles>
-            <Input 
-            type="checkbox" 
-            value="staging-manager"
-            checked= {this.props.userToView.roles.some(roles => roles.includes('staging-manager'))}/>Staging-Manager
+              </FormGroup>
+              <FormGroup checkedRoles>
+                <Label Roles>
+                  <Input
+                    type="checkbox"
+                    value="staging-manager"
+                    checked={this.props.userToView.roles.some(roles => roles.includes('staging-manager'))} />Staging-Manager
              </Label>
-            </FormGroup>
-            <FormGroup checkedRoles>
-          <Label Roles>
-            <Input 
-            type="checkbox" 
-            value="associtate"
-            checked= {this.props.userToView.roles.some(roles => roles.includes('admin'||'staging-manager'||'trainer'))}/>Associtate
+              </FormGroup>
+              <FormGroup checkedRoles>
+                <Label Roles>
+                  <Input
+                    type="checkbox"
+                    value="associtate"
+                    checked={this.props.userToView.roles.some(roles => roles.includes('admin' || 'staging-manager' || 'trainer'))} />Associtate
           </Label>
-        </FormGroup>
-        </Col>
-        </Row>  
-        <br/>
-        <Button>Update</Button>
-      </Form>
+              </FormGroup>
+            </Col>
+            <Col>
+              <Label>Cohorts</Label>
+              <Dropdown
+                color="success" className="responsive-modal-row-item rev-btn"
+                isOpen={this.props.cohortDropdownActive}
+                toggle={this.props.toggleCohortDropdown}>
+                {userToView.cohorts && <DropdownToggle caret>
+                  {userToView.cohorts.length > 0 && userToView.cohorts[0].cohortName || 'No Cohort'}
+                </DropdownToggle>}
+                {userToView.cohorts && <DropdownMenu name={inputNames.STATUS_ALIASES}>
+                  {
+                    userToView.cohorts.length === 0
+                      ? <>
+                        <DropdownItem>Unable To Find Any Cohorts</DropdownItem>
+                        <DropdownItem divider />
+                      </>
+                      : userToView.cohorts.map(cohort =>
+                        <DropdownItem key={cohort.cohortId}>{cohort.cohortName}</DropdownItem>
+                      )
+                  }
+                </DropdownMenu>}
+              </Dropdown>
+            </Col>
+          </Row>
+          <br />
+          <Button>Update</Button>
+        </Form>
       </Container>
     )
   }

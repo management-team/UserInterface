@@ -3,7 +3,7 @@ import { IState } from '../../reducers/index';
 import Profile from './profile.component';
 import { hoveredUser } from '../../actions/view-user/view-user.actions';
 import { updateLocations } from '../../actions/address/address.actions';
-import { updateUserTrainingLocation, updateUserInfo, setToCurrentSMSUser, toggleTrainingLocationsDropdown, updateUser, updateUserStatus, toggleStatusDropdown, handleCheckboxChange } from '../../actions/profile/profile.actions';
+import { updateUserTrainingLocation, updateUserInfo, setToCurrentSMSUser, toggleTrainingLocationsDropdown, updateUser, updateUserStatus, toggleStatusDropdown, handleCheckboxChange, toggleCohortDropdown } from '../../actions/profile/profile.actions';
 import { IUser } from '../../model/user.model';
 import { IAddressState, IStatusState } from '../../reducers/management';
 import { IAddress } from '../../model/address.model';
@@ -18,6 +18,7 @@ export interface IProfileProps {
     allStatus: IStatusState
     locationDropdownActive: boolean
     statusDropdownActive: boolean
+    cohortDropdownActive: boolean
     bUserInfoChanged: boolean
     virtual:boolean
     updateUserInfo(updatedUser: IUser): void
@@ -27,6 +28,7 @@ export interface IProfileProps {
     toggleTrainingLocationsDropdown(): void
     updateUserStatus(status: IStatus): void
     toggleStatusDropdown(): void
+    toggleCohortDropdown(): void
     handleCheckboxChange(status:IStatus): void
   }
 
@@ -37,6 +39,7 @@ const mapStateToProps = (state: IState) => ({
     trainingAddresses: state.managementState.addresses,
     allStatus: state.managementState.statuses,
     statusDropdownActive: state.managementState.currentProfile.statusDropdownActive,
+    cohortDropdownActive: state.managementState.currentProfile.cohortDropdownActive,
     bUserInfoChanged: state.managementState.currentProfile.bUserInfoChanged,
     virtual: state.managementState.currentProfile.virtual
 })
@@ -51,6 +54,7 @@ const mapDispatchToProps = {
    toggleTrainingLocationsDropdown,
    updateUserStatus,
    toggleStatusDropdown,
+   toggleCohortDropdown,
    handleCheckboxChange
 }
 

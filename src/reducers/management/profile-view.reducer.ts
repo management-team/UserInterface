@@ -38,6 +38,7 @@ const initialState: IProfileViewState = {
     bUserInfoChanged: false,
     locationDropdownActive: false,
     statusDropdownActive: false,
+    cohortDropdownActive: false,
     virtual: false
 }
 
@@ -84,6 +85,12 @@ export const profileViewReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 statusDropdownActive: !state.statusDropdownActive,
+                bUserInfoChanged: true
+            }
+        case profileTypes.TOGGLE_COHORT_DROPDOWN:
+            return {
+                ...state,
+                cohortDropdownActive: !state.cohortDropdownActive,
                 bUserInfoChanged: true
             }
         case profileTypes.UPDATE_USER_STATUS:

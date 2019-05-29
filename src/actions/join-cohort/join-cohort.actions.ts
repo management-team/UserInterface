@@ -60,8 +60,8 @@ export const findLoggedInUser = (user:ICognitoUser) => async (dispatch) => {
 export const joinCohort = (user:IUser, token:string, history:History) => async (dispatch) => {
     try {
         
-        const res = await cohortClient.joinCohort(user, token);
-        if(res.status === 200){
+        const join = await cohortClient.joinCohort(user, token);
+        if(join.status === 200){
             dispatch({
                 payload: {
                   },
