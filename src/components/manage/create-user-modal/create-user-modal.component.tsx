@@ -214,7 +214,7 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
                   </DropdownMenu>
                 </Dropdown>
               </div>
-              <div className="responsive-modal-column create-user-margin">
+              {createUser.newUser.cohort && <div className="responsive-modal-column create-user-margin">
                 <Label for="create-user-cohort-dropdown">Cohort</Label>
                 <Dropdown color="success" className="responsive-modal-row-item rev-btn"
                   id="create-user-cohort-dropdown"
@@ -236,7 +236,7 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
                     }
                   </DropdownMenu>
                 </Dropdown>
-              </div>
+              </div>}
             </div>
           </ModalBody>
           <ModalFooter id="create-user-modal-footer">

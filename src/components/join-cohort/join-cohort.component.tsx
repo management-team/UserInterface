@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  Button,
-  InputGroup, InputGroupText, InputGroupAddon, Input,
-  Dropdown, DropdownToggle, DropdownMenu, DropdownItem
-} from 'reactstrap';
+import { Button, Input, Label, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { IJoinCohortStateToProps, IJoinCohortDispatchToProps } from './join-cohort.container';
 import { IUser } from '../../model/user.model';
 
@@ -80,12 +76,12 @@ export class JoinCohortComponent extends React.Component<IJoinCohortProps, any> 
         break;
     }
     const tempUser: IUser = {
-      email: this.props.createUser.newUser.email,
+      email: updatedNewUser.email,
       userId: 0,
-      firstName: this.props.createUser.newUser.firstName,
-      lastName: this.props.createUser.newUser.lastName,
-      phoneNumber: this.props.createUser.newUser.phoneNumber,
-      trainingAddress: this.props.createUser.newUser.trainingAddress,
+      firstName: updatedNewUser.firstName,
+      lastName: updatedNewUser.lastName,
+      phoneNumber: updatedNewUser.phoneNumber,
+      trainingAddress: updatedNewUser.trainingAddress,
       personalAddress: {
         addressId: 0,
         street: '',
@@ -106,7 +102,7 @@ export class JoinCohortComponent extends React.Component<IJoinCohortProps, any> 
     this.props.updateNewUser(tempUser)
   }
 
-  saveNewUser = (e: React.FormEvent) => {
+  saveNewUser = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('saving')
     const tempUser: IUser = {
@@ -131,14 +127,11 @@ export class JoinCohortComponent extends React.Component<IJoinCohortProps, any> 
         specificStatus: 'Training',
         virtual: false
       },
-      roles: [this.props.createUser.newUser.role],
+      roles: ['associate'],
     }
-    this.props.saveUserAssociate(tempUser);
+    await this.props.saveUserAssociate(tempUser);
+    await this.joinCohort();
   }
-
-
-
-
 
   joinCohort = () => {
     this.props.joinCohort(this.props.joinCohortState.userToJoin, this.props.token, this.props.history)
@@ -166,73 +159,83 @@ export class JoinCohortComponent extends React.Component<IJoinCohortProps, any> 
         //Offer login or signup for the current cohort
         //on successful login/signup, take to join cohort window
         let createUser = this.props.createUser;
-        let addresses = this.props.addresses
+        let addresses = this.props.addresses;
         return (
-
-
           <form onSubmit={this.saveNewUser}>
             <div className="responsive-modal-row">
-              <InputGroup className="responsive-modal-row-item">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>Email</InputGroupText>
-                </InputGroupAddon>
-                <Input name={inputNames.EMAIL}
+              <div className="responsive-modal-column create-user-margin">
+                <Label for="create-user-firstname-input">First Name</Label>
+                <Input name={inputNames.FIRST_NAME}
+                  id="create-user-firstname-input"
+                  className="responsive-modal-row-item"
+                  placeholder="First Name"
+                  onChange={this.updateNewUserInfo}
+                  value={createUser.newUser.firstName}
+                  valid={!!createUser.newUser.firstName}
+                  invalid={!createUser.newUser.firstName} />
+              </div>
+
+              <div className="responsive-modal-column create-user-margin">
+                <Label for="create-user-lastname-input">Last Name</Label>
+                <Input name={inputNames.LAST_NAME}
+                  id="create-user-lastname-input"
+                  className="responsive-modal-row-item"
+                  placeholder="Last Name"
+                  onChange={this.updateNewUserInfo}
+                  value={createUser.newUser.lastName}
+                  valid={!!createUser.newUser.lastName}
+                  invalid={!createUser.newUser.lastName} />
+              </div>
+            </div>
+            <div className="responsive-modal-row">
+              <div className="responsive-modal-column create-user-margin">
+                <Label for="create-user-email-input">Email</Label>
+                <Input className="responsive-modal-row-item"
+                  id="create-user-email-input"
+                  name={inputNames.EMAIL}
                   onChange={this.updateNewUserInfo}
                   value={createUser.newUser.email}
                   valid={!!createUser.newUser.email}
-                  invalid={!createUser.newUser.email} />
-              </InputGroup>
-              <Dropdown color="success" className="responsive-modal-row-item rev-btn"
-                isOpen={this.props.createUser.locationDropdownActive}
-                toggle={this.props.toggleLocationDropdown}>
-                <DropdownToggle caret>
-                  {createUser.newUser.trainingAddress.alias || 'Location'}
-                </DropdownToggle>
-                <DropdownMenu>
-                  {
-                    addresses.trainingAddresses.length === 0
-                      ? <>
-                        <DropdownItem>Unable To Find Any Locations</DropdownItem>
-                        <DropdownItem divider />
-                      </>
-                      : addresses.trainingAddresses.map(location =>
-                        <DropdownItem key={location.addressId} onClick={() => this.props.updateNewUserLocation(location)}>{location.alias}</DropdownItem>
-                      )
-                  }
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-            <div className="responsive-modal-row">
-              <Input name={inputNames.FIRST_NAME}
-                className="responsive-modal-row-item"
-                placeholder="First Name"
-                onChange={this.updateNewUserInfo}
-                value={createUser.newUser.firstName}
-                valid={!!createUser.newUser.firstName}
-                invalid={!createUser.newUser.firstName} />
-
-              <Input name={inputNames.LAST_NAME}
-                className="responsive-modal-row-item"
-                placeholder="Last Name"
-                onChange={this.updateNewUserInfo}
-                value={createUser.newUser.lastName}
-                valid={!!createUser.newUser.lastName}
-                invalid={!createUser.newUser.lastName} />
-            </div>
-            <div className="responsive-modal-row">
-              <InputGroup className="responsive-modal-row-item">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>Phone Number</InputGroupText>
-                </InputGroupAddon>
-                <Input type="number"
+                  invalid={!createUser.newUser.email}
+                  placeholder="Email" />
+              </div>
+              <div className="responsive-modal-column create-user-margin">
+                <Label for="create-user-phoneNumber-input">Phone Number</Label>
+                <Input className="responsive-modal-row-item"
+                  id="create-user-phoneNumber-input"
                   name={inputNames.PHONE}
                   onChange={this.updateNewUserInfo}
                   value={createUser.newUser.phoneNumber}
                   valid={!!createUser.newUser.phoneNumber}
-                  invalid={!createUser.newUser.phoneNumber} />
-
-              </InputGroup>
+                  invalid={!createUser.newUser.phoneNumber}
+                  placeholder="Phone Number" />
+              </div>
             </div>
+            <div className="responsive-modal-row create-user-buttons">
+              <div className="responsive-modal-column create-user-margin">
+                <Label for="create-user-location-dropdown">Location</Label>
+                <Dropdown color="success" className="responsive-modal-row-item rev-btn"
+                  id="create-user-location-dropdown"
+                  isOpen={this.props.createUser.locationDropdownActive}
+                  toggle={this.props.toggleLocationDropdown}>
+                  <DropdownToggle caret>
+                    {createUser.newUser.trainingAddress.alias || 'Location'}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    {
+                      addresses.trainingAddresses.length === 0
+                        ? <>
+                          <DropdownItem>Unable To Find Any Locations</DropdownItem>
+                          <DropdownItem divider />
+                        </>
+                        : addresses.trainingAddresses.map(location =>
+                          <DropdownItem key={location.addressId} onClick={() => this.props.updateNewUserLocation(location)}>{location.alias}</DropdownItem>
+                        )
+                    }
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+              </div>
             <Button type="submit" className="rev-btn">Save</Button>
           </form>
 
