@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { IStatus } from "../../model/status.model";
 
 import { updateCurrentSMSUser } from "../current-sms-user/current-sms-user.actions";
+import { cognitoClient } from "../../axios/sms-clients/cognito-client";
+import { ICognitoUserAddGroup } from "../../model/cognito-user-add-group.model";
 
 
 export const profileTypes = {
@@ -71,12 +73,17 @@ export const toggleStatusDropdown = () => {
 }
 
 
-export const updateUser = (userToUpdate: IUser, bIsCurrentUser: boolean) => async (dispatch: (action: any) => void) => {
-
+export const updateUser = (userToUpdate: IUser, bIsCurrentUser: boolean, roles: boolean[]) => async (dispatch: (action: any) => void) => {
+    let roleNames = [
+        'admin',
+        'trainer',
+        'staging-manager',
+        'associate'
+    ]
     try {
         const resp = await userClient.updateSMSUserInfo(userToUpdate);
         toast.success('Info updated successfully');
-        dispatch ({
+        dispatch({
             payload: {
                 updatedUser: resp.data as IUser
             },
@@ -85,12 +92,29 @@ export const updateUser = (userToUpdate: IUser, bIsCurrentUser: boolean) => asyn
         if (bIsCurrentUser) {
             dispatch(updateCurrentSMSUser(resp.data));
         }
+        for (let i = 0; i < roles.length; i++) {
+            if (!roles[i]) {
+                let newCogUser: ICognitoUserAddGroup = {
+                    email: userToUpdate.email,
+                    groupName: roleNames[i]
+                };
+                await cognitoClient.removeUserFromGroup(newCogUser);
+            }
+            if (roles[i]) {
+                let newCogUser: ICognitoUserAddGroup = {
+                    email: userToUpdate.email,
+                    groupName: roleNames[i]
+                };
+                await cognitoClient.addUserToGroup(newCogUser);
+            }
+        }
+        toast.success('Roles updated successfully');
     } catch (error) {
-        toast.error('Failed to update');
+        toast.error('Failed to update user info');
     }
 }
 
-export const handleCheckboxChange = (status:IStatus) => (dispatch)=>{
+export const handleCheckboxChange = (status: IStatus) => (dispatch) => {
     dispatch({
         payload: {},
         type: profileTypes.UPDATE_VIRTUAL_STATUS_CHECKBOX

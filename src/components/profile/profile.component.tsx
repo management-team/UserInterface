@@ -35,6 +35,8 @@ class Profile extends Component<IProfileProps, IProfileState> {
       isStagingManager: this.props.userToView.roles.some(roles => roles.includes('staging-manager')),
       isAssociate: this.props.userToView.roles.some(roles => roles.includes(''))
     }
+
+    this.onUpdateClick = this.onUpdateClick.bind(this);
   }
 
  async componentDidMount() {
@@ -60,9 +62,9 @@ console.log(`\n\n\n\n\n${this.props.userToView.email}\n\n\n\n\n`);
     });
   }
 
-// componentWillUpdate (){
-// 
-// }
+async onUpdateClick() {
+  await this.props.updateUser(this.props.userToView, this.props.bUserInfoChanged, [this.state.isAdmin, this.state.isTrainer, this.state.isStagingManager, this.state.isAssociate]);
+}
 
 
   onUserInfoChangeHandler = (event: React.FormEvent) => {
@@ -157,9 +159,9 @@ console.log(`\n\n\n\n\n${this.props.userToView.email}\n\n\n\n\n`);
     event.preventDefault();
     if (this.props.bUserInfoChanged) {
       if (this.props.currentSMSUser.email === this.props.userToView.email) {
-        this.props.updateUser(this.props.userToView, true);
+        this.props.updateUser(this.props.userToView, true, [this.state.isAdmin, this.state.isTrainer, this.state.isStagingManager, this.state.isAssociate]);
       } else {
-        this.props.updateUser(this.props.userToView, false);
+        this.props.updateUser(this.props.userToView, false, [this.state.isAdmin, this.state.isTrainer, this.state.isStagingManager, this.state.isAssociate]);
       }
     }
   }
@@ -436,7 +438,8 @@ console.log(`\n\n\n\n\n${this.props.userToView.email}\n\n\n\n\n`);
         </Col>
         </Row>  
         <br/>
-        <Button>Update</Button>
+        <Button
+        onClick = {this.onUpdateClick}>Update</Button>
       </Form>
       </Container>
     )
