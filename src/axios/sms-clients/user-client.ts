@@ -1,6 +1,7 @@
 import { smsClient } from ".";
 import { IUser } from "../../model/user.model";
 
+
 const usersContext = '/user-service/users'
 
 export const userClient = {
@@ -18,5 +19,11 @@ export const userClient = {
     },
     findAllByEmails(emails: string[]) {
         return smsClient.post(usersContext + `/emails`, { emailList: emails });
+    },
+    findUsersByPartialEmail(email: string) {
+        return smsClient.get(`${usersContext}/email/partial/${email}`);
+    },
+    findAllUsers(){
+        return smsClient.get(`${usersContext}/allUsers`);
     }
 }
