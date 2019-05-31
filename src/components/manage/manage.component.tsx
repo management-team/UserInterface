@@ -19,12 +19,12 @@ export class ManageComponenet extends React.Component<IManageComponentProps, any
     const manage = this.props.match.params.manage;
     if (manage === 'users') {
       console.log('ANYTHING')
-      this.props.manageGetUsersByGroup('all');
+      this.props.manageGetUsersByGroup('all', '');
     }
   }
 
-  updateManageUsersTable = (groupName: string) => {
-    this.props.manageGetUsersByGroup(groupName);
+  updateManageUsersTable = (groupName: string, email:string) => {
+    this.props.manageGetUsersByGroup(groupName, email);
   }
 
   render() {

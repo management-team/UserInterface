@@ -6,7 +6,9 @@ import { toggleViewUserModal, selectUserForDisplay} from "../../../actions/view-
 
 export interface IManageInternalComponentProps {
   manageUsers: ICognitoUser[];
-  updateManageUsersTable: (groupName: string) => void
+  updateManageUsersTable: (groupName: string, email:string) => void;
+  toggleViewUserModal: () => void;
+  selectUserForDisplay: (selectedUser: ICognitoUser) => void;
 }
 
 const mapStateToProps = (state: IState) => {

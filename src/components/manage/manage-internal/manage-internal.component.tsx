@@ -1,21 +1,12 @@
 import * as React from 'react';
-import { Table, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { ICognitoUser } from '../../../model/cognito-user.model';
-import ViewUserModal from '../view-user-modal/view-user-modal.container';
 import DropdownItem from 'react-bootstrap/DropdownItem';
 import { Link } from 'react-router-dom';
+import { Dropdown, DropdownMenu, DropdownToggle, Table, Input, Button } from 'reactstrap';
+import { ICognitoUser } from '../../../model/cognito-user.model';
+import ViewUserModal from '../view-user-modal/view-user-modal.container';
+import { IManageInternalComponentProps } from './manage-internal.container';
+//import Label from 'reactstrap/lib/Label';
 
-export interface IManageInternalComponentProps {
-  updateManageUsersTable: (group: string) => void,
-  manageUsers: ICognitoUser[];
-  toggleViewUserModal: () => void;
-  /**
-   * Handles what happens when a user is hovered
-   * 
-   * @param email: The email address of the hovered user
-   */
-  selectUserForDisplay: (selectedUser: ICognitoUser) => void;
-}
 /**
  * {v}: dropdown with further info
  * #: hoverable props
@@ -51,66 +42,81 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
 
   constructor(props: IManageInternalComponentProps) {
     super(props);
-    this.state={
+    this.state = {
       roleDropdownList: false,
-      dropDownValue: "all"
+      dropDownValue: "all",
+      email: '',
     }
   }
   componentDidMount() {
-    this.props.updateManageUsersTable("all")
-  
-    }
-    displayUserModal = (selectedUser: ICognitoUser) => {
-        this.props.selectUserForDisplay(selectedUser);
-        this.props.toggleViewUserModal();
-    }
+    this.props.updateManageUsersTable("all", '');
 
-  toggleDropdownList =() =>{
+  }
+  displayUserModal = (selectedUser: ICognitoUser) => {
+    this.props.selectUserForDisplay(selectedUser);
+    this.props.toggleViewUserModal();
+  }
+
+  toggleDropdownList = () => {
     this.setState({
       roleDropdownList: !this.state.roleDropdownList
     });
   }
-  updateDropdown =(option: string) => {
-    this.props.updateManageUsersTable(option)
-    this.setState({dropDownValue: option})
-  } 
+  updateDropdown = (option: string) => {
+    this.props.updateManageUsersTable(option, '')
+    this.setState({ dropDownValue: option })
+  }
+
+  getUserByEmail = () => {
+    this.props.updateManageUsersTable('All', this.state.email);
+  }
+
+
+  updateValueOfSearchEmail = (e: React.FormEvent) => {
+    const target = e.target as HTMLSelectElement;
+    this.setState({
+      email: target.value
+    })
+  }
+
 
   // returns active if the role provided in the route is the routeName provided
   isActive = (routeName: string) => ((this.state.selectedRole === routeName) ? 'manage-user-nav-item-active' : 'manage-user-nav-item')
 
   render() {
+    //const { createUser } = this.props;
     let path = '/management'
     return (
       <>
-        <div id="manage-cohorts-nav" className="rev-background-color">
+        <div id="manage-user-nav" className="rev-background-color manage-user-nav">
           <div id="manage-cohorts-view-selection-container">
             <div>View By Role:</div>
             <Dropdown color="success" className="responsive-modal-row-item rev-btn"
               isOpen={this.state.roleDropdownList} toggle={this.toggleDropdownList}>
               {/* toggle={this.props.toggleViewUserModal}> */}
               <DropdownToggle caret>
-              {this.state.dropDownValue}
-                </DropdownToggle>
+                {this.state.dropDownValue}
+              </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem >
-                  <Link to= {path +"/manage/all"}
-              className={`nav-link ${this.isActive('all')}`}
-              onClick={() => this.updateDropdown('all') }>All</Link></DropdownItem>
+                  <Link to={path + "/manage/all"}
+                    className={`nav-link ${this.isActive('all')}`}
+                    onClick={() => this.updateDropdown('all')}>All</Link></DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
-                  <Link to= {path +"/manage/admin"}
-              className={`nav-link ${this.isActive('admin')}`}
-              onClick={() => this.updateDropdown('admin')}>Admin</Link></DropdownItem>
+                  <Link to={path + "/manage/admin"}
+                    className={`nav-link ${this.isActive('admin')}`}
+                    onClick={() => this.updateDropdown('admin')}>Admin</Link></DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
-                  <Link to= {path +"/manage/trainer"}
-              className={`nav-link ${this.isActive('trainer')}`}
-              onClick={() => this.updateDropdown('trainer')}>Trainer</Link></DropdownItem>
+                  <Link to={path + "/manage/trainer"}
+                    className={`nav-link ${this.isActive('trainer')}`}
+                    onClick={() => this.updateDropdown('trainer')}>Trainer</Link></DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
-                  <Link to= {path +"/manage/staging-manager"}
-              className={`nav-link ${this.isActive('staging-manager')}`}
-              onClick={() => this.updateDropdown('staging-manager')}>Staging Manager</Link></DropdownItem>
+                  <Link to={path + "/manage/staging-manager"}
+                    className={`nav-link ${this.isActive('staging-manager')}`}
+                    onClick={() => this.updateDropdown('staging-manager')}>Staging Manager</Link></DropdownItem>
                 <DropdownItem divider />
               </DropdownMenu>
             </Dropdown>
@@ -119,7 +125,24 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
           {/* <div>
             <Button className="responsive-modal-row-item rev-btn" onClick={this.props.toggleCreateCohortModal}>New Cohort</Button>
           </div> */}
+
+          <div>
+            <Input 
+              id="Search-user-by-partial-email-input"
+              className="responsive-modal-row-item no-backround-image"
+              placeholder="Email"
+              onChange={this.updateValueOfSearchEmail}
+              value={this.state.email}
+            />
+          </div>
+          <Button color="secondary"
+            onClick={this.getUserByEmail}>
+            Search
+          </Button>
         </div>
+
+
+
         <Table striped id="manage-users-table">
           <ViewUserModal />
           <thead className="rev-background-color">
@@ -137,7 +160,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                   <td>{user.firstName}</td>
                   <td>{user.lastName}</td>
                   <td>{user.email}</td>
-                  <td>{user.roles.map(role =>role.charAt(0).toUpperCase()+ role.slice(1)).join(', ')}</td> 
+                  <td>{user.roles.map(role => role.charAt(0).toUpperCase() + role.slice(1)).join(', ')}</td>
                 </tr>
               )
             }

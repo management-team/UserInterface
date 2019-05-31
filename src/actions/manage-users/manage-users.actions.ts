@@ -4,17 +4,25 @@ import { ICognitoUser } from "../../model/cognito-user.model";
 import { userClient } from "../../axios/sms-clients/user-client";
 
 export const manageUsersTypes = {
-    GET_USERS: 'MANAGE_GET_USERS',
+  GET_USERS: 'MANAGE_GET_USERS',
 }
 
-export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any) => {
+export const manageGetUsersByGroup = (groupName: string, email: string) => async (dispatch: any) => {
   console.log('groupName = ' + groupName)
 
   try {
-    const adminResponse = await cognitoClient.findUsersByGroup('admin');
-    const stagingManagerResponse = await cognitoClient.findUsersByGroup('staging-manager');
-    const trainerResponse = await cognitoClient.findUsersByGroup('trainer');
-
+    const adminResponsePromise = cognitoClient.findUsersByGroup('admin');
+    const stagingManagerResponsePromise = cognitoClient.findUsersByGroup('staging-manager');
+    const trainerResponsePromise = cognitoClient.findUsersByGroup('trainer');
+    let userInfoRespPromise;
+    if (email) {
+      userInfoRespPromise = userClient.findUsersByPartialEmail(email);
+    } else {
+      userInfoRespPromise = userClient.findAllUsers();
+    }
+    const adminResponse = await adminResponsePromise;
+    const stagingManagerResponse = await stagingManagerResponsePromise;
+    const trainerResponse = await trainerResponsePromise;
     let userMap = new Map<string, ICognitoUser>();
 
     for (let i = 0; i < adminResponse.data.Users.length; i++) {
@@ -49,34 +57,47 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
       newUser.roles.push('trainer');
       userMap.set(newUser.email, newUser);
     }
-    //change map to array
-    const mapArray = Array.from(userMap);
-    let userArray = new Array<ICognitoUser>();
-    userArray = mapArray.map(entry => entry[1]);
 
     //add user names
-    const emailList: string[] = userArray.map(user => user.email )
-    const userInfoResp = await userClient.findAllByEmails(emailList);
     
-    for ( let i = 0; i < userInfoResp.data.length; i++){
-      const respEmail = userInfoResp.data[i].email;
-      for (let j = 0; j < userArray.length; j++){
-        if(userArray[j].email === respEmail){
-          userArray[j].firstName = userInfoResp.data[i].firstName;
-          userArray[j].lastName = userInfoResp.data[i].lastName;
-        }
-      } 
-    }
-  
-    //filter by the group name
-    if (groupName !== 'all') {
-      userArray = userArray.filter(user => user.roles.some(role => role.includes(groupName)))
-    }
 
-    console.log('this is the array: ' + userArray.map(user => user.roles))
+    let userInfoResp = await userInfoRespPromise;
+
+
+
+    let listOfUsers = new Array<ICognitoUser>();
+
+    for (let i = 0; i < userInfoResp.data.length; i++) {
+      let potentialUser = userMap.get(userInfoResp.data[i].email)
+      if (potentialUser) {
+        let altenateUser = {
+          firstName: userInfoResp.data[i].firstName,
+          lastName: userInfoResp.data[i].lastName,
+          email: userInfoResp.data[i].email,
+          roles: potentialUser.roles
+        };
+        listOfUsers.push(altenateUser);
+      } else {
+        let altenateUser = {
+          firstName: userInfoResp.data[i].firstName,
+          lastName: userInfoResp.data[i].lastName,
+          email: userInfoResp.data[i].email,
+          roles: []
+        };
+        listOfUsers.push(altenateUser);
+      }
+    }
+    console.log(listOfUsers);
+
+
+
+    //filter by the group name
+    // if (groupName !== 'all') {
+    //   listOfUsers = listOfUsers.filter(user => user.roles.some(role => role.includes(groupName)))
+    // }
     dispatch({
       payload: {
-        manageUsers: userArray
+        manageUsers: listOfUsers
       },
       type: manageUsersTypes.GET_USERS
     })
