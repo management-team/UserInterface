@@ -6,7 +6,10 @@ import {
 } from 'reactstrap';
 import { ICreateCohortModal } from './create-cohort-modal.container';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
+import { ICognitoUser } from '../../../model/cognito-user.model';
+import { cognitoClient } from '../../../axios/sms-clients/cognito-client';
+import { userClient } from '../../../axios/sms-clients/user-client';
+import { toast } from "react-toastify";
 
 const inputNames = {
     DESCRIPTION: 'NEW_COHORT_DESCRIPTION',
@@ -15,13 +18,68 @@ const inputNames = {
     END_DATE: 'NEW_END_DATE'
 }
 
-export class CreateCohortModal extends React.Component<ICreateCohortModal, any> {
+interface ICreateCohortStateNotRedux {
+    trainers ?: ICognitoUser[],
+}
+
+export class CreateCohortModal extends React.Component<ICreateCohortModal, ICreateCohortStateNotRedux> {
     constructor(props: ICreateCohortModal) {
         super(props);
+        this.state = {
+            trainers: [],
+        }
+        this.getTrainers = this.getTrainers.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.updateLocations();
+        const trainerList = await this.getTrainers();
+        this.setState({
+            trainers: trainerList,
+        })
+    }
+
+    async getTrainers() {
+        try {
+            const trainerResponse = await cognitoClient.findUsersByGroup('trainer');
+
+            let userMap = new Map<string, ICognitoUser>();
+
+            for (let i = 0; i < trainerResponse.data.Users.length; i++) {
+                const currentCognitoUser = trainerResponse.data.Users[i];
+                const currentEmail = currentCognitoUser.Attributes.find((attr: any) => attr.Name === 'email').Value;
+                const mapUser = userMap.get(currentEmail)
+                let newUser: ICognitoUser = mapUser ? mapUser : {
+                    email: currentEmail,
+                    roles: []
+                };
+                newUser.roles.push('trainer');
+                userMap.set(newUser.email, newUser);
+            }
+            //change map to array
+            const mapArray = Array.from(userMap);
+            let userArray = new Array<ICognitoUser>();
+            userArray = mapArray.map(entry => entry[1]);
+
+            //add user names
+            const emailList: string[] = userArray.map(user => user.email)
+            const userInfoResp = await userClient.findAllByEmails(emailList);
+
+            for (let i = 0; i < userInfoResp.data.length; i++) {
+                const respEmail = userInfoResp.data[i].email;
+                for (let j = 0; j < userArray.length; j++) {
+                    if (userArray[j].email === respEmail) {
+                        userArray[j].firstName = userInfoResp.data[i].firstName;
+                        userArray[j].lastName = userInfoResp.data[i].lastName;
+                    }
+                }
+            }
+            return userArray;
+
+        } catch (e) {
+            toast.warn('Unable to retreive trainers');
+            return [];
+        }
     }
 
     updateNewCohortInfo = (e) => {
@@ -82,7 +140,8 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
 
     render() {
 
-        const { createCohort, addresses, manageUsers } = this.props;
+        const { createCohort, addresses, /*manageUsers*/ } = this.props;
+
         return (
             <Modal isOpen={createCohort.enabled}>
                 <form onSubmit={this.saveNewCohort}>
@@ -144,25 +203,25 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, any> 
                                 required />
                         </div>
                         <div>
-                            <Dropdown color="success" className="responsive-modal-row-item rev-btn"
+                            {this.state.trainers && <Dropdown color="success" className="responsive-modal-row-item rev-btn"
                                 isOpen={this.props.createCohort.trainerDropdownActive}
                                 toggle={this.props.toggleTrainerDropdown}>
                                 <DropdownToggle caret>
-                                    {createCohort.newCohort.trainer.email || 'Trainer'}
+                                    {createCohort.newCohort.trainer.email ? createCohort.newCohort.trainer.firstName + ' ' + createCohort.newCohort.trainer.lastName : 'Trainer'}
                                 </DropdownToggle>
                                 <DropdownMenu>
                                     {
-                                        manageUsers.manageUsers.length === 0
+                                        this.state.trainers.length === 0
                                             ? <>
                                                 <DropdownItem>No trainers available</DropdownItem>
                                                 <DropdownItem divider />
                                             </>
-                                            : manageUsers.manageUsers.map(trainer =>
-                                                <DropdownItem key={trainer.email} onClick={() => this.props.updateNewCohortTrainer(trainer)}>{trainer.email}</DropdownItem>
+                                            : this.state.trainers.map(trainer =>
+                                                <DropdownItem key={trainer.email} onClick={() => this.props.updateNewCohortTrainer(trainer)}>{trainer.firstName + ' ' + trainer.lastName}</DropdownItem>
                                             )
                                     }
                                 </DropdownMenu>
-                            </Dropdown>
+                            </Dropdown>}
                         </div>
                         <div>
                             {createCohort.isSaved &&

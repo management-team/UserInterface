@@ -86,8 +86,6 @@ export const updateNewUser = (newUser: IUser) => {
   }
 }
 
-
-//Use async await tho?
 export const saveUser = (newUser: IUser, cohort?: ICohort) => async (dispatch: (action: any) => void) => {
   await userClient.saveUser(newUser)
     .then(async resp => {

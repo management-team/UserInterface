@@ -13,6 +13,9 @@ export const userClient = {
     findOneByEmail(email: string) {
         return smsClient.get(usersContext + `/email/${email}`);
     },
+    findOneByPartialEmail(email: string) {
+        return smsClient.get(usersContext + `/email/partial/${email}`);
+    },
     updateSMSUserInfo(updatedUser: IUser) {
         return smsClient.patch(usersContext, updatedUser);
     },
