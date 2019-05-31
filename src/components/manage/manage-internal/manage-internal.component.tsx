@@ -60,8 +60,8 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
     this.props.updateManageUsersTable("all")
   
     }
-    displayUserModal = (selectedUser: ICognitoUser) => {
-        this.props.selectUserForDisplay(selectedUser);
+    displayUserModal = async (selectedUser: ICognitoUser) => {
+        await this.props.selectUserForDisplay(selectedUser);
         this.props.toggleViewUserModal();
     }
 

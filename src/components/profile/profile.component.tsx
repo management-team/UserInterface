@@ -19,10 +19,25 @@ export const inputNames = {
   STATUS_ALIASES: 'STATUS_ALIASES'
 }
 
-class Profile extends Component<IProfileProps, any> {
+export interface IProfileState {
+  isAdmin: boolean;
+  isTrainer: boolean;
+  isStagingManager: boolean;
+  isAssociate: boolean;
+}
 
+class Profile extends Component<IProfileProps, IProfileState> {
+  constructor (props){
+    super(props);
+    this.state = {
+      isAdmin: this.props.userToView.roles.some(roles => roles.includes('admin')),
+      isTrainer: this.props.userToView.roles.some(roles => roles.includes('trainer')),
+      isStagingManager: this.props.userToView.roles.some(roles => roles.includes('staging-manager')),
+      isAssociate: this.props.userToView.roles.some(roles => roles.includes(''))
+    }
+  }
 
-  componentDidMount() {
+ async componentDidMount() {
     // If looking at profile page, set info to current SMS User
     let endOfPath = location.pathname.split('/').pop();
     if (endOfPath && endOfPath === 'profile') {
@@ -34,7 +49,20 @@ class Profile extends Component<IProfileProps, any> {
         this.props.setToCurrentSMSUser(this.props.currentSMSUser);
       }
     }
+
+console.log(`\n\n\n\n\n${this.props.userToView.email}\n\n\n\n\n`);
+
+    await this.setState({
+      isAdmin: this.props.userToView.roles.some(roles => roles.includes('admin')),
+      isTrainer: this.props.userToView.roles.some(roles => roles.includes('trainer')),
+      isStagingManager: this.props.userToView.roles.some(roles => roles.includes('staging-manager')),
+      isAssociate: this.props.userToView.roles.some(roles => roles.includes('admin'||'staging-manager'||'trainer'))
+    });
   }
+
+// componentWillUpdate (){
+// 
+// }
 
 
   onUserInfoChangeHandler = (event: React.FormEvent) => {
@@ -143,6 +171,30 @@ class Profile extends Component<IProfileProps, any> {
   // handleCheckboxChange = (status) =>{
   // this.props.updateUserStatus(status.virtual);
   // }
+
+  // toggleCheckbox = () =>{
+  //   this.setState({
+  //     roleCheckbox: !this.state.roleCheckbox
+  //   });
+  // }
+
+  alterUserRole = (role: String) => {
+    switch(role) {
+      case 'ADMIN':
+        this.setState({isAdmin: !this.state.isAdmin })
+        break;
+      case 'TRAINER':
+        this.setState({isTrainer: !this.state.isTrainer})
+        break;
+      case 'STAGING-MANAGER':
+        this.setState({isStagingManager: !this.state.isStagingManager})
+        break;
+      case 'ASSOCIATE':
+        this.setState({isAssociate: !this.state.isAssociate})
+        break;
+    }
+  }
+
   render() {
     const {userToView, trainingAddresses, allStatus} = this.props;
     // const Checkbox = props => (
@@ -346,7 +398,9 @@ class Profile extends Component<IProfileProps, any> {
             <Input 
             type="checkbox" 
             value="admin"
-            checked= {this.props.userToView.roles.some(roles => roles.includes('admin'))} /> Admin
+            checked= {this.state.isAdmin} 
+            onChange={(e) => this.alterUserRole('ADMIN')}
+            /> Admin
             </Label>
             </FormGroup>
             <FormGroup checkedRoles>
@@ -354,7 +408,9 @@ class Profile extends Component<IProfileProps, any> {
             <Input 
             type="checkbox" 
             value="trainer"
-            checked= {this.props.userToView.roles.some(roles => roles.includes('trainer'))} />Trainer
+            checked= {this.state.isTrainer}
+            onChange={(e) => this.alterUserRole('TRAINER')}
+            />Trainer
              </Label>
             </FormGroup>
             <FormGroup checkedRoles>
@@ -362,7 +418,9 @@ class Profile extends Component<IProfileProps, any> {
             <Input 
             type="checkbox" 
             value="staging-manager"
-            checked= {this.props.userToView.roles.some(roles => roles.includes('staging-manager'))}/>Staging-Manager
+            checked= {this.state.isStagingManager}
+            onChange={(e) => this.alterUserRole('STAGING-MANAGER')}
+            />Staging-Manager
              </Label>
             </FormGroup>
             <FormGroup checkedRoles>
@@ -370,7 +428,9 @@ class Profile extends Component<IProfileProps, any> {
             <Input 
             type="checkbox" 
             value="associtate"
-            checked= {this.props.userToView.roles.some(roles => roles.includes('admin'||'staging-manager'||'trainer'))}/>Associtate
+            checked= {this.state.isAssociate}
+            onChange = {(e) => this.alterUserRole('ASSOCIATE')}
+            />Associtate
           </Label>
         </FormGroup>
         </Col>
