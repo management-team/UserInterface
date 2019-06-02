@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import { IAddress } from '../../model/address.model';
 import { IProfileProps } from './profile.container';
+import { cognitoRoles } from '../../model/cognito-user.model';
 
 
 export const inputNames = {
@@ -346,7 +347,7 @@ class Profile extends Component<IProfileProps, any> {
                   <Input
                     type="checkbox"
                     value="admin"
-                    checked={this.props.userToView.roles.some(roles => roles.includes('admin'))} /> Admin
+                    checked={this.props.userToView.roles.some(roles => roles.includes(cognitoRoles.ADMIN))} /> Admin
             </Label>
               </FormGroup>
               <FormGroup checkedRoles>
@@ -354,7 +355,7 @@ class Profile extends Component<IProfileProps, any> {
                   <Input
                     type="checkbox"
                     value="trainer"
-                    checked={this.props.userToView.roles.some(roles => roles.includes('trainer'))} />Trainer
+                    checked={this.props.userToView.roles.some(roles => roles.includes(cognitoRoles.TRAINER))} />Trainer
              </Label>
               </FormGroup>
               <FormGroup checkedRoles>
@@ -362,7 +363,7 @@ class Profile extends Component<IProfileProps, any> {
                   <Input
                     type="checkbox"
                     value="staging-manager"
-                    checked={this.props.userToView.roles.some(roles => roles.includes('staging-manager'))} />Staging-Manager
+                    checked={this.props.userToView.roles.some(roles => roles.includes(cognitoRoles.STAGING_MANAGER))} />Staging-Manager
              </Label>
               </FormGroup>
               <FormGroup checkedRoles>
@@ -370,7 +371,7 @@ class Profile extends Component<IProfileProps, any> {
                   <Input
                     type="checkbox"
                     value="associtate"
-                    checked={this.props.userToView.roles.some(roles => roles.includes('admin' || 'staging-manager' || 'trainer'))} />Associtate
+                    checked={this.props.userToView.roles.some(roles => roles.includes(cognitoRoles.ADMIN || cognitoRoles.STAGING_MANAGER || cognitoRoles.TRAINER))} />Associtate
           </Label>
               </FormGroup>
             </Col>

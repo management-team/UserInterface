@@ -68,6 +68,8 @@ export interface IAuthState {
   //list of emails and roles for users used to populate table
   export interface IManageUsersState {
     manageUsers: ICognitoUser[];
+    manageUsersCurrentPage: number;
+    manageUsersPageTotal: number;
   }
  //current user logged in
   export interface ICurrentSMSUserState {

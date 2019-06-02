@@ -4,3 +4,9 @@ export interface ICognitoUser {
     email: string;
     roles: string[];
 }
+
+export const cognitoRoles = {
+    ADMIN:'admin',
+    STAGING_MANAGER:'staging-manager',
+    TRAINER:'trainer'
+}

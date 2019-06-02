@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { IViewUserModal } from './view-user-modal.container';
 import Profile from '../../profile/profile.container';
+import { cognitoRoles } from '../../../model/cognito-user.model';
 
 
 
@@ -38,7 +39,7 @@ export class ViewUserModal extends React.Component<IViewUserModal, any> {
           <ModalHeader className="rev-background-color">User Info</ModalHeader>
           <ModalBody>
           
-          {this.props.user.roles.some(role => (role === 'admin'))
+          {this.props.user.roles.some(role => (role === cognitoRoles.ADMIN))
            ?  
             <Profile/> 
               :
