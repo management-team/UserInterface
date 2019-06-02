@@ -5,6 +5,8 @@ import { userClient } from "../../axios/sms-clients/user-client";
 
 export const manageUsersTypes = {
     GET_USERS: 'MANAGE_GET_USERS',
+    UPDATE_SEARCH_EMAIL: 'UPDATE_SEARCH_EMAIL',
+    UPDATE_SEARCH_OPTION: 'UPDATE_SEARCH_OPTION'
 }
 
 export const manageGetUsersByGroup = (groupName: string, email: string, page?: number) => async (dispatch: any) => {
@@ -115,6 +117,24 @@ export const manageGetUsersByGroup = (groupName: string, email: string, page?: n
             type: ''
         })
     }
+}
+
+export const updateSearchEmail = (newEmailSearch: string) => async (dispatch: any) => {
+    dispatch({
+        payload: {
+            emailSearch: newEmailSearch,
+        },
+        type: manageUsersTypes.UPDATE_SEARCH_EMAIL
+    });
+}
+
+export const updateSearchOption = (newSearchOption: string) => async (dispatch: any) => {
+    dispatch({
+        payload: {
+            option: newSearchOption,
+        },
+        type: manageUsersTypes.UPDATE_SEARCH_OPTION
+    });
 }
 
 function addUserRolesToMap(role: string, users, userMap: Map<string, ICognitoUser>) {
