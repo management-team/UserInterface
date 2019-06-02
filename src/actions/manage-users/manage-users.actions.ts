@@ -2,10 +2,13 @@ import { cognitoClient } from "../../axios/sms-clients/cognito-client";
 import { toast } from "react-toastify";
 import { ICognitoUser } from "../../model/cognito-user.model";
 import { userClient } from "../../axios/sms-clients/user-client";
+import { sortTypes } from "../../components/manage/manage-internal/manage-internal.component";
 
 export const manageUsersTypes = {
     GET_USERS: 'MANAGE_GET_USERS',
+    GET_USERS_SORTED: 'GET_USERS_SORTED'
 }
+
 
 export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any) => {
   console.log('groupName = ' + groupName)
@@ -76,7 +79,8 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
     console.log('this is the array: ' + userArray.map(user => user.roles))
     dispatch({
       payload: {
-        manageUsers: userArray
+        manageUsers: userArray,
+        currentRole: groupName
       },
       type: manageUsersTypes.GET_USERS
     })
@@ -90,3 +94,65 @@ export const manageGetUsersByGroup = (groupName: string) => async (dispatch: any
   }
 }
 
+
+export const sortUsers = (userArray:ICognitoUser[], sortKey) => (dispatch: any) => {
+  console.log(userArray)
+  userArray = userArray.sort((a,b) => sortBy(a,b,sortKey));
+
+  dispatch({
+    payload:{
+      manageUsers: userArray,
+      userTableSort: sortKey
+    },
+    type: manageUsersTypes.GET_USERS_SORTED
+  })
+}
+
+function sortBy(user1,user2,sortKey) {
+  if (user1 === user2){
+    return 0;
+  }
+  if (!user2) {
+    return 1;
+  }
+  if (!user1) {
+    return -1;
+  }
+  switch (sortKey){
+    case sortTypes.FIRST_NAME:
+    return sortByString(user1.firstName, user2.firstName)
+    case sortTypes.LAST_NAME:
+    return sortByString(user1.lastName, user2.lastName)
+    case sortTypes.EMAIL:
+    return sortByString(user1.email, user2.email)
+    case sortTypes.FIRST_NAME_REVERSE:
+    return sortByString(user1.firstName, user2.firstName) * (-1)
+    case sortTypes.LAST_NAME_REVERSE:
+    return sortByString(user1.lastName, user2.lastName) * (-1)
+    case sortTypes.EMAIL_REVERSE:
+    return sortByString(user1.email, user2.email) * (-1)
+    default:
+    return 0;
+  }
+  
+}
+
+function sortByString(a,b) {
+  if (a === b){
+    return 0;
+  }
+  if (!b) {
+    return 1;
+  }
+  if (!a) {
+    return -1;
+  }
+  if (a < b){
+    return -1;
+  }
+  if (a > b){
+    return 1;
+  }
+  return 0;
+  
+}

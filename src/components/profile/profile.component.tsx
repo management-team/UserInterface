@@ -370,7 +370,7 @@ class Profile extends Component<IProfileProps, any> {
                   <Input
                     type="checkbox"
                     value="associtate"
-                    checked={this.props.userToView.roles.some(roles => roles.includes('admin' || 'staging-manager' || 'trainer'))} />Associtate
+                    checked={this.props.userToView.roles.some(roles => roles === null)} />Associtate
           </Label>
               </FormGroup>
             </Col>

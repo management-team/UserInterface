@@ -67,7 +67,10 @@ export interface IAuthState {
   }
   //list of emails and roles for users used to populate table
   export interface IManageUsersState {
-    manageUsers: ICognitoUser[];
+    manageUsers: ICognitoUser[],
+    componentLoaded: boolean,
+    currentRole: string,
+    userTableSort: string,
   }
  //current user logged in
   export interface ICurrentSMSUserState {
