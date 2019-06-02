@@ -6,6 +6,7 @@ import {
 import { ICreateUserModal } from './create-user-modal.container';
 import { IUser } from '../../../model/user.model';
 import Label from 'reactstrap/lib/Label';
+import { cognitoRoles } from '../../../model/cognito-user.model';
 
 
 const inputNames = {
@@ -207,9 +208,9 @@ export class CreateUserModal extends React.Component<ICreateUserModal, any> {
                     {createUser.newUser.dropdownRole || 'Role'}
                   </DropdownToggle>
                   <DropdownMenu>
-                    <DropdownItem onClick={() => this.props.updateNewUserRole('admin', 'Admin')}>Admin</DropdownItem>
-                    <DropdownItem onClick={() => this.props.updateNewUserRole('staging-manager', 'Staging Manager')}>Staging Manager</DropdownItem>
-                    <DropdownItem onClick={() => this.props.updateNewUserRole('trainer', 'Trainer')}>Trainer</DropdownItem>
+                    <DropdownItem onClick={() => this.props.updateNewUserRole(cognitoRoles.ADMIN, 'Admin')}>Admin</DropdownItem>
+                    <DropdownItem onClick={() => this.props.updateNewUserRole(cognitoRoles.STAGING_MANAGER, 'Staging Manager')}>Staging Manager</DropdownItem>
+                    <DropdownItem onClick={() => this.props.updateNewUserRole(cognitoRoles.TRAINER, 'Trainer')}>Trainer</DropdownItem>
                     <DropdownItem onClick={() => this.props.updateNewUserRole('associate', 'Associate')}>Associate</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>

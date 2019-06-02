@@ -72,6 +72,15 @@ $screen-xl-min: 1200px;
 .align-start {
   align-self: flex-start;
 }
+.horizontal-centering{
+    justify-content: center;
+}
+.vertical-centering{
+    align-items: center;
+}
+.text-vertical-centering{
+    text-align: center;
+}
 /********************************************
   Shared
 ********************************************/

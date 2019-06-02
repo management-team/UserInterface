@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 import { ICreateCohortModal } from './create-cohort-modal.container';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { ICognitoUser } from '../../../model/cognito-user.model';
+import { ICognitoUser, cognitoRoles } from '../../../model/cognito-user.model';
 import { cognitoClient } from '../../../axios/sms-clients/cognito-client';
 import { userClient } from '../../../axios/sms-clients/user-client';
 import { toast } from "react-toastify";
@@ -41,7 +41,7 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, ICrea
 
     async getTrainers() {
         try {
-            const trainerResponse = await cognitoClient.findUsersByGroup('trainer');
+            const trainerResponse = await cognitoClient.findUsersByGroup(cognitoRoles.TRAINER);
 
             let userMap = new Map<string, ICognitoUser>();
 
@@ -53,7 +53,7 @@ export class CreateCohortModal extends React.Component<ICreateCohortModal, ICrea
                     email: currentEmail,
                     roles: []
                 };
-                newUser.roles.push('trainer');
+                newUser.roles.push(cognitoRoles.TRAINER);
                 userMap.set(newUser.email, newUser);
             }
             //change map to array

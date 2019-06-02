@@ -23,10 +23,14 @@ export const userClient = {
     findAllByEmails(emails: string[]) {
         return smsClient.post(usersContext + `/emails`, { emailList: emails });
     },
-    findUsersByPartialEmail(email: string) {
-        return smsClient.get(`${usersContext}/email/partial/${email}`);
+    findUsersByPartialEmail(email: string, page: number = 0) {
+        return smsClient.post(`${usersContext}/email/partial`,
+            {
+                emailFragement: email,
+                page: page
+            });
     },
-    findAllUsers(){
-        return smsClient.get(`${usersContext}/allUsers`);
+    findAllUsers(page: number = 0) {
+        return smsClient.get(`${usersContext}/allUsers/page/${page}`);
     }
 }
