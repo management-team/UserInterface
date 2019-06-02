@@ -70,6 +70,8 @@ export interface IAuthState {
     manageUsers: ICognitoUser[];
     manageUsersCurrentPage: number;
     manageUsersPageTotal: number;
+    emailSearch: string;
+    option: string;
   }
  //current user logged in
   export interface ICurrentSMSUserState {

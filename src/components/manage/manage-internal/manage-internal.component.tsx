@@ -40,8 +40,6 @@ import { IManageInternalComponentProps } from './manage-internal.container';
 
 interface ManageInternalState {
     roleDropdownList: boolean;
-    dropDownValue: string;
-    email: string;
     selectedRole: string;
 }
 
@@ -51,17 +49,15 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
         super(props);
         this.state = {
             roleDropdownList: false,
-            dropDownValue: "all",
-            email: '',
             selectedRole: ''
         };
     }
     componentDidMount() {
-        this.props.updateManageUsersTable("all", '', this.props.manageUsersCurrentPage);
+        this.props.updateManageUsersTable("all", '', this.props.manageUsers.manageUsersCurrentPage);
 
     }
-    displayUserModal = (selectedUser: ICognitoUser) => {
-        this.props.selectUserForDisplay(selectedUser);
+    displayUserModal = async (selectedUser: ICognitoUser) => {
+        await this.props.selectUserForDisplay(selectedUser);
         this.props.toggleViewUserModal();
     }
 
@@ -72,39 +68,37 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
     }
     updateDropdown = (option: string, page: number) => {
         console.log('test')
-        this.props.updateManageUsersTable(option, this.state.email, page)
-        this.setState({ dropDownValue: option })
+        this.props.updateManageUsersTable(option, this.props.manageUsers.emailSearch, page);
+        this.props.updateSearchOption(option);
     }
 
     getUserByEmail = (page: number) => {
-        this.props.updateManageUsersTable('All', this.state.email, page);
+        this.props.updateManageUsersTable('All', this.props.manageUsers.emailSearch, page);
     }
 
     updateValueOfSearchEmail = (e: React.FormEvent) => {
         const target = e.target as HTMLSelectElement;
-        this.setState({
-            email: target.value
-        })
+        this.props.updateSearchEmail(target.value);
     }
 
     incrementPage = () => {
-        if (this.props.manageUsersCurrentPage < this.props.manageUsersPageTotal - 1) {
-            const newPage = this.props.manageUsersCurrentPage + 1;
-            if (this.state.email) {
+        if (this.props.manageUsers.manageUsersCurrentPage < this.props.manageUsers.manageUsersPageTotal - 1) {
+            const newPage = this.props.manageUsers.manageUsersCurrentPage + 1;
+            if (this.props.manageUsers.emailSearch) {
                 this.getUserByEmail(newPage);
             } else {
-                this.updateDropdown(this.state.dropDownValue, newPage);
+                this.updateDropdown(this.props.manageUsers.option, newPage);
             }
         }
     }
 
     decrementPage = () => {
-        if (this.props.manageUsersCurrentPage > 0) {
-            const newPage = this.props.manageUsersCurrentPage - 1;
-            if (this.state.email) {
+        if (this.props.manageUsers.manageUsersCurrentPage > 0) {
+            const newPage = this.props.manageUsers.manageUsersCurrentPage - 1;
+            if (this.props.manageUsers.emailSearch) {
                 this.getUserByEmail(newPage);
             } else {
-                this.updateDropdown(this.state.dropDownValue, newPage);
+                this.updateDropdown(this.props.manageUsers.option, newPage);
             }
         }
     }
@@ -114,9 +108,8 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
     isActive = (routeName: string) => ((this.state.selectedRole === routeName) ? 'manage-user-nav-item-active' : 'manage-user-nav-item')
 
     render() {
-        //const { createUser } = this.props;
         let path = '/management';
-        const searchPage = this.props.manageUsersCurrentPage;
+        const searchPage = this.props.manageUsers.manageUsersCurrentPage;
         return (
             <>
                 <div id="manage-user-nav" className="rev-background-color manage-user-nav">
@@ -124,9 +117,8 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                         <div>View By Role:</div>
                         <Dropdown color="success" className="responsive-modal-row-item rev-btn"
                             isOpen={this.state.roleDropdownList} toggle={this.toggleDropdownList}>
-                            {/* toggle={this.props.toggleViewUserModal}> */}
                             <DropdownToggle caret>
-                                {this.state.dropDownValue}
+                                {this.props.manageUsers.option}
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem >
@@ -158,7 +150,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                             className="responsive-modal-row-item no-backround-image"
                             placeholder="Email"
                             onChange={this.updateValueOfSearchEmail}
-                            value={this.state.email}
+                            value={this.props.manageUsers.emailSearch}
                         />
                     </div>
                     <Button color="secondary" onClick={() => this.getUserByEmail(0)}>
@@ -180,7 +172,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                     </thead>
                     <tbody>
                         {
-                            this.props.manageUsers.map((user) =>
+                            this.props.manageUsers.manageUsers.map((user) =>
                                 <tr key={user.email} className="rev-table-row" onClick={() => this.displayUserModal(user)}>
                                     <td>{user.firstName}</td>
                                     <td>{user.lastName}</td>
@@ -194,7 +186,7 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
                 <div className='row horizontal-centering vertical-centering'>
                     <Button variant="button-color" className="rev-background-color div-child" onClick={this.decrementPage}>Prev</Button>
                     <h6 className="div-child text-style" >
-                        Page {this.props.manageUsersCurrentPage + 1} of {this.props.manageUsersPageTotal}
+                        Page {this.props.manageUsers.manageUsersCurrentPage + 1} of {this.props.manageUsers.manageUsersPageTotal}
                     </h6>
                     <Button variant="button-color" className="rev-background-color div-child" onClick={this.incrementPage}>Next</Button>
                 </div>
