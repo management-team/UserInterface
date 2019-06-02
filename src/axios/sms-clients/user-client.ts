@@ -20,8 +20,12 @@ export const userClient = {
     updateSMSUserInfo(updatedUser: IUser) {
         return smsClient.patch(usersContext, updatedUser);
     },
-    findAllByEmails(emails: string[]) {
-        return smsClient.post(usersContext + `/emails`, { emailList: emails });
+    findAllByEmails(emails: string[], page: number = 0) {
+        return smsClient.post(usersContext + `/emails`,
+            {
+                emailList: emails,
+                page: page
+            });
     },
     findUsersByPartialEmail(email: string, page: number = 0) {
         return smsClient.post(`${usersContext}/email/partial`,
