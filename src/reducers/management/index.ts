@@ -109,8 +109,11 @@ export interface ICohortModalState {
 
 
   export interface IManageCohortsState {
-    cohorts: ICohort[]
+    cohorts: ICohort[],
+    currentPage: number,
+    totalPages: number
   }
+  
   export interface IProfileViewState {
     user: IUser,
     bUserInfoChanged: boolean,

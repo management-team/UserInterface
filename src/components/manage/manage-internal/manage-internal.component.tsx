@@ -71,7 +71,8 @@ export class ManageInternalComponenet extends React.Component<IManageInternalCom
         });
     }
     updateDropdown = (option: string, page: number) => {
-        this.props.updateManageUsersTable(option, '', page)
+        console.log('test')
+        this.props.updateManageUsersTable(option, this.state.email, page)
         this.setState({ dropDownValue: option })
     }
 

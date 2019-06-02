@@ -8,10 +8,14 @@ export const manageUsersTypes = {
 }
 
 export const manageGetUsersByGroup = (groupName: string, email: string, page?: number) => async (dispatch: any) => {
+    console.log('groupName = ' + email)
     console.log('groupName = ' + groupName)
     page || (page = 0);
-
+    groupName && (groupName = groupName.toLocaleLowerCase());
     try {
+        let userMap = new Map<string, ICognitoUser>();
+        let emailList: string[] = [];
+        let userInfoRespPromise;
 
         let adminResponsePromise;
         let stagingManagerResponsePromise;
@@ -19,12 +23,21 @@ export const manageGetUsersByGroup = (groupName: string, email: string, page?: n
 
         if (groupName === cognitoRoles.ADMIN) {
             adminResponsePromise = cognitoClient.findUsersByGroup(cognitoRoles.ADMIN);
+            const adminResponse = await adminResponsePromise;
+            emailList = adminResponse.data.Users.map(user =>
+                user.Attributes.find((attr: any) => attr.Name === 'email').Value);
         }
         else if (groupName === cognitoRoles.STAGING_MANAGER) {
             stagingManagerResponsePromise = cognitoClient.findUsersByGroup(cognitoRoles.STAGING_MANAGER);
+            const stagingManagerResponse = await stagingManagerResponsePromise;
+            emailList = stagingManagerResponse.data.Users.map(user =>
+                user.Attributes.find((attr: any) => attr.Name === 'email').Value);
         }
         else if (groupName === cognitoRoles.TRAINER) {
             trainerResponsePromise = cognitoClient.findUsersByGroup(cognitoRoles.TRAINER);
+            const trainerResponse = await trainerResponsePromise;
+            emailList = trainerResponse.data.Users.map(user =>
+                user.Attributes.find((attr: any) => attr.Name === 'email').Value);
         }
         else {
             adminResponsePromise = cognitoClient.findUsersByGroup(cognitoRoles.ADMIN);
@@ -32,14 +45,16 @@ export const manageGetUsersByGroup = (groupName: string, email: string, page?: n
             trainerResponsePromise = cognitoClient.findUsersByGroup(cognitoRoles.TRAINER);
         }
 
-
-        let userInfoRespPromise;
-        if (email) {
+        if (emailList.length) {
+            if (email) {
+                emailList = emailList.filter((currentEmail) => currentEmail.toLocaleLowerCase().includes(email));
+            }
+            userInfoRespPromise = userClient.findAllByEmails(emailList, page);
+        } else if (email) {
             userInfoRespPromise = userClient.findUsersByPartialEmail(email, page);
         } else {
             userInfoRespPromise = userClient.findAllUsers(page);
         }
-        let userMap = new Map<string, ICognitoUser>();
 
         if (adminResponsePromise) {
             const adminResponse = await adminResponsePromise;
@@ -49,7 +64,7 @@ export const manageGetUsersByGroup = (groupName: string, email: string, page?: n
             const stagingManagerResponse = await stagingManagerResponsePromise;
             addUserRolesToMap(cognitoRoles.STAGING_MANAGER, stagingManagerResponse.data.Users, userMap);
         }
-        if (stagingManagerResponsePromise) {
+        if (trainerResponsePromise) {
             const trainerResponse = await trainerResponsePromise;
             addUserRolesToMap(cognitoRoles.TRAINER, trainerResponse.data.Users, userMap);
         }
@@ -62,7 +77,6 @@ export const manageGetUsersByGroup = (groupName: string, email: string, page?: n
 
 
         let listOfUsers = new Array<ICognitoUser>();
-
         for (let i = 0; i < userServiceUserList.length; i++) {
             let potentialUser = userMap.get(userServiceUserList[i].email)
             let altenateUser = {
@@ -73,9 +87,16 @@ export const manageGetUsersByGroup = (groupName: string, email: string, page?: n
             };
             if (potentialUser) {
                 altenateUser.roles = potentialUser.roles
+                console.log(altenateUser.roles);
             }
 
-            listOfUsers.push(altenateUser);
+            // add user only if group filter allows
+            if (altenateUser.roles.includes(groupName)) {
+                listOfUsers.push(altenateUser);
+            }
+            else if (groupName === 'all') {
+                listOfUsers.push(altenateUser);
+            }
         }
 
         dispatch({
